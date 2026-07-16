@@ -1,4 +1,5 @@
 import { House, Menu, UserRound } from 'lucide-react';
+import { Link } from 'react-router-dom'
 import BrandMark from '../footer/BrandMark';
 
 export default function Header() {
@@ -8,9 +9,9 @@ export default function Header() {
         <button type="button" aria-label="Open navigation" className="w-14 h-14 rounded-full bg-neutral-300 flex items-center justify-center">
           <Menu className="w-8 h-8 text-black" strokeWidth={1.5} />
         </button>
-        <a href="#" aria-label="Home" className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+        <Link to="/" aria-label="Home" className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
           <House className="w-6 h-6 text-white fill-white" strokeWidth={2.5} />
-        </a>
+        </Link>
       </div>
       <div className="absolute top-11 left-1/2 -translate-x-1/2 scale-110 origin-top">
         <BrandMark />
