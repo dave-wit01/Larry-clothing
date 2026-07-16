@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react'
 import { CategoryGrid } from '../components/CategoryGrid'
 import { CreationsSection } from '../components/CreationsSection'
 import { FallWinterSection } from '../components/FallWinterSection'
-import { Footer } from '../components/Footer'
+import { Footer as FooterComponent } from '../components/Footer'
+import SuitsGrid from '../components/men/SuitsGrid'
+import LeatherGoodsGrid from '../components/women/LeatherGoodsGrid'
+import FullFooter from './Footer'
 import { Header } from '../components/Header'
 import { HeroSection } from '../components/HeroSection'
 import { MenuDrawer } from '../components/MenuDrawer'
@@ -39,8 +42,14 @@ export function HomePage({ onOpenLogin, onOpenRegister }: HomePageProps) {
         <CreationsSection />
         <CategoryGrid />
         <FallWinterSection />
+
+        {/* FRONTEND1 sections included to make homepage a fullsite */}
+        <SuitsGrid />
+        <LeatherGoodsGrid />
       </main>
-      <Footer />
+
+      {/* Use the fullsite Footer from the pages folder (FRONTEND1) */}
+      <FullFooter />
     </div>
   )
 }
