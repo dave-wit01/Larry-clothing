@@ -1,17 +1,16 @@
-import { useEffect, useRef, useState } from 'react'
-import { Search, User, X } from 'lucide-react'
-import { menuLinks, type MenuCategory } from '../data/navigation'
+import { useEffect, useRef } from 'react'
+import { Home, Search, User, X } from 'lucide-react'
+import { menuLinks } from '../data/navigation'
 import { BrandLogo } from './BrandLogo'
 
 type MenuDrawerProps = {
   isOpen: boolean
   onClose: () => void
+  onNavigate?: (link: string) => void
+  onGoHome?: () => void
 }
 
-const categories: MenuCategory[] = ['Women', 'Men']
-
-export function MenuDrawer({ isOpen, onClose }: MenuDrawerProps) {
-  const [activeCategory, setActiveCategory] = useState<MenuCategory>('Women')
+export function MenuDrawer({ isOpen, onClose, onNavigate, onGoHome }: MenuDrawerProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -41,28 +40,37 @@ export function MenuDrawer({ isOpen, onClose }: MenuDrawerProps) {
       aria-modal="true"
       aria-label="Main navigation"
     >
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
-        <div className="flex items-center gap-4 sm:gap-5">
+      <header className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center px-5 py-4 sm:px-8 lg:px-10">
+        <div className="flex items-center gap-1 justify-self-start sm:gap-2">
           <button
             ref={closeButtonRef}
-            className="icon-button border-transparent hover:border-transparent"
-            type="button"
-            aria-label="Close menu"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-ink transition-all duration-150 hover:bg-ink/5 hover:text-emerald active:scale-90 active:bg-ink/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald"
             onClick={onClose}
           >
             <X size={20} strokeWidth={1.5} />
           </button>
           <button
-            className="hidden h-10 w-10 items-center justify-center rounded-full text-ink transition-colors hover:text-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald sm:flex"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-ink transition-all duration-150 hover:bg-ink/5 hover:text-emerald active:scale-90 active:bg-ink/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald"
             type="button"
             aria-label="Search Larry Clothing"
           >
             <Search size={19} strokeWidth={1.5} />
           </button>
+          <button
+            className="flex h-10 w-10 items-center justify-center rounded-full text-ink transition-all duration-150 hover:bg-ink/5 hover:text-emerald active:scale-90 active:bg-ink/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald"
+            type="button"
+            aria-label="Go to home page"
+            onClick={() => {
+              if (onGoHome) onGoHome()
+              onClose()
+            }}
+          >
+            <Home size={19} strokeWidth={1.5} />
+          </button>
         </div>
 
         <a
-          className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-ink sm:h-16 sm:w-16"
+          className="flex h-14 w-14 items-center justify-center justify-self-center overflow-hidden rounded-full bg-ink transition-transform duration-150 active:scale-95 sm:h-16 sm:w-16"
           href="#top"
           aria-label="Larry Clothing home"
           onClick={onClose}
@@ -71,7 +79,7 @@ export function MenuDrawer({ isOpen, onClose }: MenuDrawerProps) {
         </a>
 
         <button
-          className="icon-button border-transparent hover:border-transparent"
+          className="flex h-10 w-10 items-center justify-center justify-self-end rounded-full text-ink transition-all duration-150 hover:bg-ink/5 hover:text-emerald active:scale-90 active:bg-ink/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald"
           type="button"
           aria-label="Open account"
         >
@@ -81,40 +89,27 @@ export function MenuDrawer({ isOpen, onClose }: MenuDrawerProps) {
 
       <main className="mx-auto flex min-h-[calc(100vh-88px)] max-w-6xl flex-col px-7 pb-6 pt-5 sm:px-8 lg:px-10">
         <div className="w-full max-w-[30rem]">
-          <div
-            className="flex flex-col gap-3"
-            role="group"
-            aria-label="Collection category"
-          >
-            {categories.map((category) => {
-              const isActive = activeCategory === category
-
-              return (
-                <button
-                  key={category}
-                  className={`rounded-full px-4 py-1.5 text-left text-xl leading-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald sm:text-2xl ${
-                    isActive
-                      ? 'bg-[#d3d3d3] text-ink'
-                      : 'bg-[#d3d3d3] text-ink hover:bg-[#c5c5c5]'
-                  }`}
-                  type="button"
-                  aria-pressed={isActive}
-                  onClick={() => setActiveCategory(category)}
-                >
-                  {category}
-                </button>
-              )
-            })}
+          <div className="inline-flex items-center rounded-full bg-[#d3d3d3] px-5 py-2 text-lg font-medium leading-none text-ink shadow-sm sm:text-xl">
+            Men
           </div>
 
-          <nav className="mt-16" aria-label={`${activeCategory} collection`}>
+          <nav className="mt-14 sm:mt-16" aria-label="Men collection">
             <ul className="space-y-9 sm:space-y-10">
-              {menuLinks[activeCategory].map((link) => (
+              {menuLinks.Men.map((link) => (
                 <li key={link}>
                   <a
-                    className="inline-block border-b-2 border-ink pb-1 text-lg leading-none transition-colors hover:border-emerald hover:text-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald sm:text-xl"
+                    className="inline-block border-b-2 border-transparent pb-1 text-lg leading-none transition-all duration-150 hover:border-emerald hover:text-emerald active:scale-[0.97] active:text-emerald active:border-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald sm:text-xl"
                     href="#creations"
-                    onClick={onClose}
+                    onClick={(event) => {
+                     if (
+  (link === 'Casual wear' || link === 'Suit wear' || link === 'Office wear' || link === 'Street wear') &&
+  onNavigate
+) {
+                        event.preventDefault()
+                        onNavigate(link)
+                      }
+                      onClose()
+                    }}
                   >
                     {link}
                   </a>
@@ -124,7 +119,7 @@ export function MenuDrawer({ isOpen, onClose }: MenuDrawerProps) {
           </nav>
         </div>
         <a
-          className="mt-auto self-center border-b border-ink/70 text-sm text-ink/70 transition-colors hover:border-ink hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald"
+          className="mt-auto self-center border-b border-ink/70 text-sm text-ink/70 transition-all duration-150 hover:border-ink hover:text-ink active:scale-95 active:text-emerald active:border-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald"
           href="#contact"
           onClick={onClose}
         >

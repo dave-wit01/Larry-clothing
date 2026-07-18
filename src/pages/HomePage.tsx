@@ -13,9 +13,22 @@ import { MenuDrawer } from '../components/MenuDrawer'
 type HomePageProps = {
   onOpenLogin?: () => void
   onOpenRegister?: () => void
+  onNavigateCasual?: () => void
+  onNavigateSuit?: () => void
+  onNavigateOffice?: () => void
+  onNavigateStreet?: () => void
+  onGoHome?: () => void
 }
 
-export function HomePage({ onOpenLogin, onOpenRegister }: HomePageProps) {
+export function HomePage({
+  onOpenLogin,
+  onOpenRegister,
+  onNavigateCasual,
+  onNavigateSuit,
+  onNavigateOffice,
+  onNavigateStreet,
+  onGoHome,
+}: HomePageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -36,7 +49,25 @@ export function HomePage({ onOpenLogin, onOpenRegister }: HomePageProps) {
         onOpenLogin={onOpenLogin}
         onOpenRegister={onOpenRegister}
       />
-      <MenuDrawer isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      <MenuDrawer
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onNavigate={(link) => {
+          if (link === 'Casual wear' && onNavigateCasual) {
+            onNavigateCasual()
+          }
+          if (link === 'Suit wear' && onNavigateSuit) {
+            onNavigateSuit()
+          }
+          if (link === 'Office wear' && onNavigateOffice) {
+            onNavigateOffice()
+          }
+          if (link === 'Street wear' && onNavigateStreet) {
+            onNavigateStreet()
+          }
+        }}
+        onGoHome={onGoHome}
+      />
       <main>
         <HeroSection />
         <CreationsSection />

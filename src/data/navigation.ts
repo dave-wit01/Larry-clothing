@@ -11,12 +11,14 @@ export const menuLinks: Record<MenuCategory, string[]> = {
     'Services',
   ],
   Men: [
-    'New Arrivals',
-    'Ready-to-Wear',
-    'Bags and Small Leather Goods',
-    'Shoes and Accessories',
-    'Watches',
-    'Gifts and Personalization',
+    'Casual wear',
+    'Office wear',
+    'Suit wear',
+    'Street wear',
+    'Traditional Outfit',
+    'Underwear',
+    'Socks',
     'Services',
   ],
+
 }
