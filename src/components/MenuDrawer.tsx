@@ -101,10 +101,10 @@ export function MenuDrawer({ isOpen, onClose, onNavigate, onGoHome }: MenuDrawer
                     className="inline-block border-b-2 border-transparent pb-1 text-lg leading-none transition-all duration-150 hover:border-emerald hover:text-emerald active:scale-[0.97] active:text-emerald active:border-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald sm:text-xl"
                     href="#creations"
                     onClick={(event) => {
-                     if (
-  (link === 'Casual wear' || link === 'Suit wear' || link === 'Office wear' || link === 'Street wear') &&
-  onNavigate
-) {
+                    if (
+                      (link === 'Casual wear' || link === 'Suit wear' || link === 'Office wear' || link === 'Street wear' || link === 'Traditional Outfit' || link === 'Underwear' || link === 'Socks') &&
+                      onNavigate
+                    ) {
                         event.preventDefault()
                         onNavigate(link)
                       }

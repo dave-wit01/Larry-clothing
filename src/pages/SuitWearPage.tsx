@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
 import { SuitWearSection } from '../components/SuitWearSection'
-import FullFooter from './Footer'
+import FullFooter from './Footer.jsx'
 
 type SuitWearPageProps = {
   onOpenLogin?: () => void
@@ -11,6 +11,8 @@ type SuitWearPageProps = {
   onNavigateCasual?: () => void
   onNavigateOffice?: () => void
   onNavigateStreet?: () => void
+  onNavigateUnderwear?: () => void
+  onNavigateSocks?: () => void
 }
 
 export function SuitWearPage({
@@ -20,6 +22,8 @@ export function SuitWearPage({
   onNavigateCasual,
   onNavigateOffice,
   onNavigateStreet,
+  onNavigateUnderwear,
+  onNavigateSocks,
 }: SuitWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -54,6 +58,12 @@ export function SuitWearPage({
           }
           if (link === 'Street wear' && onNavigateStreet) {
             onNavigateStreet()
+          }
+          if (link === 'Underwear' && onNavigateUnderwear) {
+            onNavigateUnderwear()
+          }
+          if (link === 'Socks' && onNavigateSocks) {
+            onNavigateSocks()
           }
         }}
       />

@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react'
 import { CategoryGrid } from '../components/CategoryGrid'
 import { CreationsSection } from '../components/CreationsSection'
 import { FallWinterSection } from '../components/FallWinterSection'
-import { Footer as FooterComponent } from '../components/Footer'
-import SuitsGrid from '../components/men/SuitsGrid'
-import LeatherGoodsGrid from '../components/women/LeatherGoodsGrid'
-import FullFooter from './Footer'
+import SuitsGrid from '../components/men/SuitsGrid.jsx'
+import FullFooter from './Footer.jsx'
 import { Header } from '../components/Header'
 import { HeroSection } from '../components/HeroSection'
 import { MenuDrawer } from '../components/MenuDrawer'
+import { TraditionalWearSection } from '../components/TraditionalWearSection'
 
 type HomePageProps = {
   onOpenLogin?: () => void
@@ -17,6 +16,9 @@ type HomePageProps = {
   onNavigateSuit?: () => void
   onNavigateOffice?: () => void
   onNavigateStreet?: () => void
+  onNavigateTraditional?: () => void
+  onNavigateUnderwear?: () => void
+  onNavigateSocks?: () => void
   onGoHome?: () => void
 }
 
@@ -27,6 +29,9 @@ export function HomePage({
   onNavigateSuit,
   onNavigateOffice,
   onNavigateStreet,
+  onNavigateTraditional,
+  onNavigateUnderwear,
+  onNavigateSocks,
   onGoHome,
 }: HomePageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -65,6 +70,15 @@ export function HomePage({
           if (link === 'Street wear' && onNavigateStreet) {
             onNavigateStreet()
           }
+          if (link === 'Traditional Outfit' && onNavigateTraditional) {
+            onNavigateTraditional()
+          }
+          if (link === 'Underwear' && onNavigateUnderwear) {
+            onNavigateUnderwear()
+          }
+          if (link === 'Socks' && onNavigateSocks) {
+            onNavigateSocks()
+          }
         }}
         onGoHome={onGoHome}
       />
@@ -73,10 +87,10 @@ export function HomePage({
         <CreationsSection />
         <CategoryGrid />
         <FallWinterSection />
+        <TraditionalWearSection />
 
         {/* FRONTEND1 sections included to make homepage a fullsite */}
         <SuitsGrid />
-        <LeatherGoodsGrid />
       </main>
 
       {/* Use the fullsite Footer from the pages folder (FRONTEND1) */}

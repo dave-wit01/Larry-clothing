@@ -1,30 +1,32 @@
 import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
-import { OfficeWearSection } from '../components/OfficeWearSection'
+import { TraditionalWearSection } from '../components/TraditionalWearSection'
 import FullFooter from './Footer.jsx'
 
-type OfficeWearPageProps = {
+type TraditionalWearPageProps = {
   onOpenLogin?: () => void
   onOpenRegister?: () => void
   onGoHome?: () => void
   onNavigateCasual?: () => void
   onNavigateSuit?: () => void
+  onNavigateOffice?: () => void
   onNavigateStreet?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
 }
 
-export function OfficeWearPage({
+export function TraditionalWearPage({
   onOpenLogin,
   onOpenRegister,
   onGoHome,
   onNavigateCasual,
   onNavigateSuit,
+  onNavigateOffice,
   onNavigateStreet,
   onNavigateUnderwear,
   onNavigateSocks,
-}: OfficeWearPageProps) {
+}: TraditionalWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -56,6 +58,9 @@ export function OfficeWearPage({
           if (link === 'Suit wear' && onNavigateSuit) {
             onNavigateSuit()
           }
+          if (link === 'Office wear' && onNavigateOffice) {
+            onNavigateOffice()
+          }
           if (link === 'Street wear' && onNavigateStreet) {
             onNavigateStreet()
           }
@@ -68,7 +73,7 @@ export function OfficeWearPage({
         }}
       />
       <main>
-        <OfficeWearSection />
+        <TraditionalWearSection />
       </main>
       <FullFooter />
     </div>
