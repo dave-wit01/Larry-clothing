@@ -6,12 +6,19 @@ import {
   type TraditionalWearMediaItem,
 } from '../data/traditionalWear'
 
+type CartProduct = {
+  name: string
+  price: number
+  image: string
+}
+
 type TraditionalWearSectionProps = {
   heading?: string
   items?: TraditionalWearMediaItem[]
   paragraph?: string
   bottomImage?: string
   bottomImageAlt?: string
+  onSelectItem?: (product: CartProduct) => void
 }
 
 export function TraditionalWearSection({
@@ -20,6 +27,7 @@ export function TraditionalWearSection({
   paragraph = DEFAULT_TRADITIONAL_WEAR_PARAGRAPH,
   bottomImage = DEFAULT_TRADITIONAL_WEAR_BOTTOM_IMAGE,
   bottomImageAlt = 'Group wearing traditional-inspired streetwear on a highway overpass',
+  onSelectItem,
 }: TraditionalWearSectionProps) {
   const mediaItems = useMemo(() => items.slice(0, 2), [items])
 
@@ -35,7 +43,18 @@ export function TraditionalWearSection({
 
         <div className="mx-auto mt-10 grid max-w-md grid-cols-2 gap-6 sm:mt-14 sm:max-w-xl sm:gap-10 lg:max-w-2xl">
           {mediaItems.map((item) => (
-            <div key={item.id} className="flex flex-col items-center gap-4">
+            <button
+              key={item.id}
+              type="button"
+              onClick={() =>
+                onSelectItem?.({
+                  name: item.label,
+                  price: 250,
+                  image: item.type === 'video' ? item.poster ?? '' : item.src,
+                })
+              }
+              className="flex flex-col items-center gap-4 text-left"
+            >
               <div className="aspect-square w-full overflow-hidden rounded-[50%] border border-line bg-parchment shadow-sm">
                 {item.type === 'video' ? (
                   <video
@@ -59,7 +78,7 @@ export function TraditionalWearSection({
               <p className="text-sm font-medium uppercase tracking-[0.12em] text-ink sm:text-base">
                 {item.label}
               </p>
-            </div>
+            </button>
           ))}
         </div>
 

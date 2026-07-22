@@ -14,6 +14,7 @@ type SocksPageProps = {
   onNavigateStreet?: () => void
   onNavigateUnderwear?: () => void
   onNavigateTraditional?: () => void
+  onOpenCart?: (product: { name: string; price: number; image: string }) => void
 }
 
 export function SocksPage({
@@ -26,6 +27,7 @@ export function SocksPage({
   onNavigateStreet,
   onNavigateUnderwear,
   onNavigateTraditional,
+  onOpenCart,
 }: SocksPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -73,7 +75,7 @@ export function SocksPage({
         }}
       />
       <main>
-        <SocksSection />
+        <SocksSection onSelectItem={onOpenCart} />
       </main>
       <FullFooter />
     </div>

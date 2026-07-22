@@ -8,7 +8,7 @@ export const menuLinks: Record<MenuCategory, string[]> = {
     'Perfumes and Small Leather Goods',
     'Jewelry',
     'Watches',
-    'Services',
+    'About Coslaary',
   ],
   Men: [
     'Casual wear',
@@ -18,7 +18,7 @@ export const menuLinks: Record<MenuCategory, string[]> = {
     'Traditional Outfit',
     'Underwear',
     'Socks',
-    'Services',
+    'About Coslaary',
   ],
 
 }

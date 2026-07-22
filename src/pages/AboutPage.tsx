@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
-import { UnderwearSection } from '../components/UnderwearSection'
 import FullFooter from './Footer.jsx'
 
-type UnderwearPageProps = {
+type AboutPageProps = {
   onOpenLogin?: () => void
   onOpenRegister?: () => void
   onGoHome?: () => void
@@ -15,10 +14,9 @@ type UnderwearPageProps = {
   onNavigateTraditional?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
-  onOpenCart?: (product: { name: string; price: number; image: string }) => void
 }
 
-export function UnderwearPage({
+export function AboutPage({
   onOpenLogin,
   onOpenRegister,
   onGoHome,
@@ -29,8 +27,7 @@ export function UnderwearPage({
   onNavigateTraditional,
   onNavigateUnderwear,
   onNavigateSocks,
-  onOpenCart,
-}: UnderwearPageProps) {
+}: AboutPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -79,9 +76,45 @@ export function UnderwearPage({
           }
         }}
       />
-      <main>
-        <UnderwearSection onSelectItem={onOpenCart} />
+
+      <main className="flex flex-col items-center px-6 py-10 text-center">
+        <h1 className="text-2xl font-medium tracking-wide mb-10">About COSLAARY</h1>
+
+        <section className="max-w-md mb-10">
+          <h2 className="text-sm font-medium tracking-widest mb-4">About Us</h2>
+          <p className="text-sm leading-relaxed text-ink/80">
+            COSLAARY is a premium men's clothing brand founded in 2024.
+            We focus on quiet quality — pieces built with weight, structure, and
+            details that matter. No loud branding, no trends for the sake of trends.
+            The name and eagle stand for strength, clarity, and intention. Every
+            item is made for men who value craftsmanship over hype. Subtle,
+            intentional, and made to last.
+          </p>
+        </section>
+
+        <section className="max-w-md mb-10">
+          <h2 className="text-sm font-medium tracking-widest mb-4">MISSION</h2>
+          <p className="text-sm leading-relaxed text-ink/80">
+            COSLAARY exists to create premium clothing that speaks in details.
+            We believe a man's style should be felt before it's seen.
+            Our mission is to deliver pieces built with real weight, clean structure,
+            and intentional craftsmanship - so every man who wears CosLaary
+            feels confident, comfortable, and remembered for quality, not logos.
+          </p>
+        </section>
+
+        <section className="max-w-md mb-12">
+          <h2 className="text-sm font-medium tracking-widest mb-4">EYESIGHT</h2>
+          <p className="text-sm leading-relaxed text-ink/80">
+            We envision a world where men choose intention over impulse.
+            COSLAARY aims to be recognized globally as the brand that proved
+            "less is more" - where quality, weight, and detail replace loud branding.
+            Our goal is to build a wardrobe of essentials that men wear for years,
+            not seasons. Clothing that carries connotation, confidence, and craft.
+          </p>
+        </section>
       </main>
+
       <FullFooter />
     </div>
   )

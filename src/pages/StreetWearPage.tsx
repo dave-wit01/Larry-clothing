@@ -11,8 +11,10 @@ type StreetWearPageProps = {
   onNavigateCasual?: () => void
   onNavigateSuit?: () => void
   onNavigateOffice?: () => void
+  onNavigateTraditional?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
+  onOpenCart?: (product: { name: string; price: number; image: string }) => void
 }
 
 export function StreetWearPage({
@@ -22,8 +24,10 @@ export function StreetWearPage({
   onNavigateCasual,
   onNavigateSuit,
   onNavigateOffice,
+  onNavigateTraditional,
   onNavigateUnderwear,
   onNavigateSocks,
+  onOpenCart,
 }: StreetWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -59,6 +63,9 @@ export function StreetWearPage({
           if (link === 'Office wear' && onNavigateOffice) {
             onNavigateOffice()
           }
+          if (link === 'Traditional Outfit' && onNavigateTraditional) {
+            onNavigateTraditional()
+          }
           if (link === 'Underwear' && onNavigateUnderwear) {
             onNavigateUnderwear()
           }
@@ -68,7 +75,7 @@ export function StreetWearPage({
         }}
       />
       <main>
-        <StreetWearSection />
+        <StreetWearSection onSelectItem={onOpenCart} />
       </main>
       <FullFooter />
     </div>

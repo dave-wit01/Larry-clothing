@@ -11,11 +11,18 @@ type CasualCategoryItem = {
   imageUrl: string
 }
 
+type CartProduct = {
+  name: string
+  price: number
+  image: string
+}
+
 type CasualWearSectionProps = {
   heading?: string
   description?: string
   categories?: CasualCategoryItem[]
-} & Omit<ComponentPropsWithoutRef<'section'>, 'children'>
+  onSelectItem?: (product: CartProduct) => void
+} & Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'onSelect'>
 
 const defaultCategories: CasualCategoryItem[] = [
   { id: 'casual-1', label: 'Monogram', imageUrl: monogram1 },
@@ -28,6 +35,7 @@ export function CasualWearSection({
   heading = 'Casual wear',
   description = "Marking the return of the lvxtm collection, the 130th annivesary of the monogram origine.Vnm, time trunk,and monogram embleme. Blending creative spirit with timeless elegance, each collection reflects a distinct facet of CosLarry",
   categories = defaultCategories,
+  onSelectItem,
   ...sectionProps
 }: CasualWearSectionProps) {
   return (
@@ -39,7 +47,18 @@ export function CasualWearSection({
 
       <div className="mx-auto flex max-w-6xl justify-center gap-6 px-5 sm:gap-10 sm:px-8 lg:px-10">
         {categories.map((item) => (
-          <a key={item.id} href="#top" className="group block text-center">
+          <button
+            key={item.id}
+            type="button"
+            onClick={() =>
+              onSelectItem?.({
+                name: item.label,
+                price: 250,
+                image: item.imageUrl,
+              })
+            }
+            className="group block text-center"
+          >
             <div className="h-16 w-16 overflow-hidden rounded-full bg-parchment sm:h-24 sm:w-24">
               <img
                 src={item.imageUrl}
@@ -48,7 +67,7 @@ export function CasualWearSection({
               />
             </div>
             <p className="mt-2 text-xs text-ink sm:text-sm">{item.label}</p>
-          </a>
+          </button>
         ))}
       </div>
 

@@ -10,6 +10,13 @@ type StreetCategoryItem = {
   id: string
   label: string
   imageUrl: string
+  price: number
+}
+
+type CartProduct = {
+  name: string
+  price: number
+  image: string
 }
 
 type StreetWearSectionProps = {
@@ -17,13 +24,14 @@ type StreetWearSectionProps = {
   productName?: string
   description?: string
   categories?: StreetCategoryItem[]
+  onSelectItem?: (product: CartProduct) => void
 } & Omit<ComponentPropsWithoutRef<'section'>, 'children'>
 
 const defaultCategories: StreetCategoryItem[] = [
-  { id: 'street-1', label: 'Monogram', imageUrl: monogram1 },
-  { id: 'street-2', label: 'Monogram', imageUrl: monogram2 },
-  { id: 'street-3', label: 'LV Murakami', imageUrl: lvMurakami },
-  { id: 'street-4', label: 'VVN &Time Trunk', imageUrl: vvnTimeTrunk },
+  { id: 'street-1', label: 'Monogram', imageUrl: monogram1, price: 250 },
+  { id: 'street-2', label: 'Monogram', imageUrl: monogram2, price: 250 },
+  { id: 'street-3', label: 'LV Murakami', imageUrl: lvMurakami, price: 250 },
+  { id: 'street-4', label: 'VVN &Time Trunk', imageUrl: vvnTimeTrunk, price: 250 },
 ]
 
 export function StreetWearSection({
@@ -31,8 +39,11 @@ export function StreetWearSection({
   productName = 'Le Speedy',
   description = "Marking the return of the lvxtm collection, the 130th annivesary of the monogram origine.Vnm, time trunk,and monogram embleme. Blending creative spirit with timeless elegance, each collection reflects a distinct facet of CosLarry",
   categories = defaultCategories,
+  onSelectItem,
   ...sectionProps
 }: StreetWearSectionProps) {
+  const price = 250
+
   return (
     <section className="w-full bg-paper text-ink" {...sectionProps}>
       <div className="mx-auto max-w-6xl px-5 py-8 text-center sm:px-8 sm:py-10 lg:px-10">
@@ -40,7 +51,17 @@ export function StreetWearSection({
       </div>
 
       <div className="w-full">
-        <img src={heroImage} alt={heading} className="h-[45vh] w-full object-cover sm:h-[65vh]" />
+        <button
+          type="button"
+          className="group block w-full"
+          onClick={() => onSelectItem?.({ name: productName, price, image: heroImage })}
+        >
+          <img
+            src={heroImage}
+            alt={heading}
+            className="h-[45vh] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 sm:h-[65vh]"
+          />
+        </button>
       </div>
 
       <div className="mx-auto max-w-2xl px-5 pt-10 text-center sm:px-8 sm:pt-14">
@@ -48,11 +69,17 @@ export function StreetWearSection({
       </div>
 
       <div className="mx-auto max-w-6xl px-5 pt-8 sm:px-8 lg:px-10">
-        <img
-          src={secondaryImage}
-          alt={`${heading} detail`}
-          className="h-[28vh] w-full rounded-2xl object-cover sm:h-[38vh]"
-        />
+        <button
+          type="button"
+          className="group block w-full"
+          onClick={() => onSelectItem?.({ name: productName, price, image: secondaryImage })}
+        >
+          <img
+            src={secondaryImage}
+            alt={`${heading} detail`}
+            className="h-[28vh] w-full rounded-2xl object-cover transition-transform duration-700 ease-out group-hover:scale-105 sm:h-[38vh]"
+          />
+        </button>
       </div>
 
       <div className="mx-auto max-w-2xl px-5 py-10 text-center sm:px-8 sm:py-14">
@@ -61,7 +88,12 @@ export function StreetWearSection({
 
       <div className="mx-auto flex max-w-6xl justify-center gap-6 px-5 pb-14 sm:gap-10 sm:px-8 sm:pb-20 lg:px-10">
         {categories.map((item) => (
-          <a key={item.id} href="#top" className="group block text-center">
+          <button
+            key={item.id}
+            type="button"
+            className="group block text-center"
+            onClick={() => onSelectItem?.({ name: item.label, price: item.price, image: item.imageUrl })}
+          >
             <div className="h-16 w-16 overflow-hidden rounded-full bg-parchment sm:h-24 sm:w-24">
               <img
                 src={item.imageUrl}
@@ -70,7 +102,7 @@ export function StreetWearSection({
               />
             </div>
             <p className="mt-2 text-xs text-ink sm:text-sm">{item.label}</p>
-          </a>
+          </button>
         ))}
       </div>
     </section>

@@ -1,23 +1,21 @@
-import { Link } from 'react-router-dom'
+export default function FooterLinks({ onNavigateAbout }) {
+  const footerLinks = [
+    { label: 'Help', action: null },
+    { label: 'Services', action: null },
+    { label: 'About CosLarry', action: () => { console.log('About clicked, onNavigateAbout is:', onNavigateAbout); if (onNavigateAbout) onNavigateAbout(); } },
+    { label: 'Email Sign-up', action: null },
+  ]
 
-const footerLinks = [
-  { label: 'Help', to: '/help' },
-  { label: 'Services', to: '/services' },
-  { label: 'About CosLarry', to: '/about' },
-  { label: 'Email Sign-up', to: '/signup' },
-]
-
-export default function FooterLinks() {
   return (
     <nav className="w-full max-w-3xl mx-auto" aria-label="Footer navigation">
       {footerLinks.map((item) => (
-        <Link
+        <button
           key={item.label}
-          to={item.to}
-          className="block px-6 py-5 text-base md:text-lg text-gray-900 border-b border-gray-200 hover:bg-gray-50 transition-colors"
+          onClick={item.action || undefined}
+          className="block w-full text-left px-6 py-5 text-base md:text-lg text-gray-900 border-b border-gray-200 hover:bg-gray-50 transition-colors"
         >
           {item.label}
-        </Link>
+        </button>
       ))}
     </nav>
   );

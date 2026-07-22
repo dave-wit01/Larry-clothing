@@ -4,6 +4,12 @@ import { MenuDrawer } from '../components/MenuDrawer'
 import { TraditionalWearSection } from '../components/TraditionalWearSection'
 import FullFooter from './Footer.jsx'
 
+type CartProduct = {
+  name: string
+  price: number
+  image: string
+}
+
 type TraditionalWearPageProps = {
   onOpenLogin?: () => void
   onOpenRegister?: () => void
@@ -14,6 +20,7 @@ type TraditionalWearPageProps = {
   onNavigateStreet?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
+  onOpenCart?: (product: CartProduct) => void
 }
 
 export function TraditionalWearPage({
@@ -26,6 +33,7 @@ export function TraditionalWearPage({
   onNavigateStreet,
   onNavigateUnderwear,
   onNavigateSocks,
+  onOpenCart,
 }: TraditionalWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -73,7 +81,7 @@ export function TraditionalWearPage({
         }}
       />
       <main>
-        <TraditionalWearSection />
+        <TraditionalWearSection onSelectItem={onOpenCart} />
       </main>
       <FullFooter />
     </div>

@@ -11,8 +11,11 @@ type SuitWearPageProps = {
   onNavigateCasual?: () => void
   onNavigateOffice?: () => void
   onNavigateStreet?: () => void
+  onNavigateTraditional?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
+  onNavigateAbout?: () => void
+  onOpenCart?: (product: { name: string; price: number; image: string }) => void
 }
 
 export function SuitWearPage({
@@ -22,8 +25,11 @@ export function SuitWearPage({
   onNavigateCasual,
   onNavigateOffice,
   onNavigateStreet,
+  onNavigateTraditional,
   onNavigateUnderwear,
   onNavigateSocks,
+  onNavigateAbout,
+  onOpenCart,
 }: SuitWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -59,18 +65,24 @@ export function SuitWearPage({
           if (link === 'Street wear' && onNavigateStreet) {
             onNavigateStreet()
           }
+          if (link === 'Traditional Outfit' && onNavigateTraditional) {
+            onNavigateTraditional()
+          }
           if (link === 'Underwear' && onNavigateUnderwear) {
             onNavigateUnderwear()
           }
           if (link === 'Socks' && onNavigateSocks) {
             onNavigateSocks()
           }
+          if (link === 'About Coslaary' && onNavigateAbout) {
+            onNavigateAbout()
+          }
         }}
       />
       <main>
-        <SuitWearSection />
+        <SuitWearSection onSelectItem={onOpenCart} />
       </main>
-      <FullFooter />
+      <FullFooter onNavigateAbout={onNavigateAbout} />
     </div>
   )
 }

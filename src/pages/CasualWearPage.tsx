@@ -4,6 +4,12 @@ import { MenuDrawer } from '../components/MenuDrawer'
 import { CasualWearSection } from '../components/CasualWearSection'
 import FullFooter from './Footer.jsx'
 
+type CartProduct = {
+  name: string
+  price: number
+  image: string
+}
+
 type CasualWearPageProps = {
   onOpenLogin?: () => void
   onOpenRegister?: () => void
@@ -11,8 +17,11 @@ type CasualWearPageProps = {
   onNavigateSuit?: () => void
   onNavigateOffice?: () => void
   onNavigateStreet?: () => void
+  onNavigateTraditional?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
+  onNavigateAbout?: () => void
+  onOpenCart?: (product: CartProduct) => void
 }
 
 export function CasualWearPage({
@@ -22,8 +31,11 @@ export function CasualWearPage({
   onNavigateSuit,
   onNavigateOffice,
   onNavigateStreet,
+  onNavigateTraditional,
   onNavigateUnderwear,
   onNavigateSocks,
+  onNavigateAbout,
+  onOpenCart,
 }: CasualWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -59,18 +71,24 @@ export function CasualWearPage({
           if (link === 'Street wear' && onNavigateStreet) {
             onNavigateStreet()
           }
+          if (link === 'Traditional Outfit' && onNavigateTraditional) {
+            onNavigateTraditional()
+          }
           if (link === 'Underwear' && onNavigateUnderwear) {
             onNavigateUnderwear()
           }
           if (link === 'Socks' && onNavigateSocks) {
             onNavigateSocks()
           }
+          if (link === 'About Coslaary' && onNavigateAbout) {
+            onNavigateAbout()
+          }
         }}
       />
       <main>
-        <CasualWearSection />
+        <CasualWearSection onSelectItem={onOpenCart} />
       </main>
-      <FullFooter />
+      <FullFooter onNavigateAbout={onNavigateAbout} />
     </div>
   )
 }
