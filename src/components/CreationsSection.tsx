@@ -7,7 +7,7 @@ export function CreationsSection() {
       className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-20 lg:px-10"
     >
       <h2 className="mx-auto max-w-2xl text-center font-display text-2xl font-medium leading-snug sm:text-3xl lg:text-4xl">
-        Explore a selection of Larry Clothing&rsquo;s Creations
+        Explore a selection of CosLaary Creations
       </h2>
       <div className="mt-9 grid grid-cols-2 gap-3 sm:mt-12 sm:gap-6 lg:gap-8">
         {creations.map((creation) => (

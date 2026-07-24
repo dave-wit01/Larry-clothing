@@ -1,5 +1,10 @@
 import type { ComponentPropsWithoutRef } from 'react'
 import menSuitImage from '../assets/men suit 2.jpg'
+import menSuitCategoryImage from '../assets/menSuitCategory.jpg'
+import menSuitRedStarImage from '../assets/menSuitCategory2.jpg'
+import menSuitPinstripeImage from '../assets/menSuitCategory3.jpg'
+import menSuitCreamImage from '../assets/menSuitCategory4.jpg'
+import menSuitShortsDetailImage from '../assets/menSuitCategory5.jpg'
 
 type CategoryItem = {
   id: string
@@ -16,39 +21,39 @@ type CategoryGridProps = {
 const defaultItems: CategoryItem[] = [
   {
     id: 'cat-1',
-    label: "Men's Suit",
+    label: "",
     imageUrl: menSuitImage,
   },
   {
     id: 'cat-2',
-    label: "Women's Suit",
-    imageUrl: 'https://picsum.photos/id/1027/800/1000',
+    label: "",
+    imageUrl: menSuitCategoryImage,
   },
   {
     id: 'cat-3',
-    label: "Men's Suit",
-    imageUrl: 'https://picsum.photos/id/1074/800/1000',
+    label: "",
+    imageUrl: menSuitRedStarImage,
   },
   {
     id: 'cat-4',
-    label: "Women's Suit",
-    imageUrl: 'https://picsum.photos/id/1011/800/1000',
+    label: "",
+    imageUrl: menSuitPinstripeImage,
   },
   {
     id: 'cat-5',
-    label: "Men's Suit",
-    imageUrl: 'https://picsum.photos/id/1080/800/1000',
+    label: "",
+    imageUrl: menSuitCreamImage,
   },
   {
     id: 'cat-6',
-    label: "Women's Suit",
-    imageUrl: 'https://picsum.photos/id/1062/800/1000',
+    label: "",
+    imageUrl: menSuitShortsDetailImage,
   },
 ]
 
 export function CategoryGrid({
   items = defaultItems,
-  heading = 'Featured Categories',
+  heading = 'Shop By Style',
   subheading = 'Curated tailoring and elevated staples for every moment.',
   ...sectionProps
 }: CategoryGridProps) {
@@ -60,7 +65,7 @@ export function CategoryGrid({
     >
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-xs font-medium uppercase tracking-[0.25em] text-emerald">
-          Shop by style
+        iconic Minimalism. Effortless lewdness.
         </p>
         <h2 className="mt-3 font-display text-2xl font-medium leading-snug text-ink sm:text-3xl lg:text-4xl">
           {heading}

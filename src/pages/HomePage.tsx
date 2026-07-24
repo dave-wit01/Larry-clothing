@@ -91,7 +91,7 @@ export function HomePage({
         onClose={() => setIsServicesOpen(false)}
         onNavigateHome={onGoHome}
         onNavigateCasual={onNavigateCasual}
-        onNavigateAbout={onNavigateAbout}
+        onOpenMenu={() => setIsMenuOpen(true)}
       />
       <main>
         <HeroSection />

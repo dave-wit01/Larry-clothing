@@ -22,17 +22,17 @@ export function HeroSection() {
         <div className="absolute inset-x-0 bottom-0 px-5 pb-10 sm:px-10 sm:pb-14 lg:px-16 lg:pb-20">
           <div className="mx-auto max-w-6xl">
             <p className="text-xs font-medium uppercase tracking-[0.25em] text-white/90">
-              Women
+              Men
             </p>
             <h1 className="mt-2 font-display text-4xl font-semibold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
-              High Summer
+              The Connotation Collection
             </h1>
             <a
               className="group mt-5 inline-block text-sm uppercase tracking-[0.15em] text-white/95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
               href="#creations"
             >
               <span className="flex items-center gap-2">
-                Discover the Collection{' '}
+                DISCOVER THE ESSENTIALS
                 <ArrowRight
                   className="transition-transform duration-300 group-hover:translate-x-1"
                   size={14}

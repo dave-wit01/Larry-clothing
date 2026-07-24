@@ -11,8 +11,8 @@ export type Creation = {
 export const creations: Creation[] = [
   {
     id: 'resort',
-    label: 'Resort Edit',
-    title: 'Poolside Staples',
+    label: 'EXAMINE NOW',
+    title: 'Minimal + lifestyle',
     imageUrl: resortImage,
   },
   {

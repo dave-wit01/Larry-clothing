@@ -102,7 +102,7 @@ export function MenuDrawer({ isOpen, onClose, onNavigate, onGoHome }: MenuDrawer
                     href="#creations"
                     onClick={(event) => {
                     if (
-                      (link === 'Casual wear' || link === 'Suit wear' || link === 'Office wear' || link === 'Street wear' || link === 'Traditional Outfit' || link === 'Underwear' || link === 'Socks' || link === 'About Coslaary') &&
+                      (link === 'Casual wear' || link === 'Suit wear' || link === 'Office wear' || link === 'Street wear' || link === 'Traditional Outfit' || link === 'Underwear' || link === 'Socks' || link === 'About CosLaary') &&
                       onNavigate
                     ) {
                         event.preventDefault()

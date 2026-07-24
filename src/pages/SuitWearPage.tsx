@@ -74,7 +74,7 @@ export function SuitWearPage({
           if (link === 'Socks' && onNavigateSocks) {
             onNavigateSocks()
           }
-          if (link === 'About Coslaary' && onNavigateAbout) {
+          if (link === 'About CosLaary' && onNavigateAbout) {
             onNavigateAbout()
           }
         }}

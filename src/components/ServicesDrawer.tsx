@@ -6,7 +6,7 @@ type ServicesDrawerProps = {
   onClose: () => void
   onNavigateHome?: () => void
   onNavigateCasual?: () => void
-  onNavigateAbout?: () => void
+  onOpenMenu?: () => void
 }
 
 const topItems = ['HOME', 'T-SHIRT', 'POLOS', 'CASUAL WEAR', 'JERSEY']
@@ -17,6 +17,7 @@ export function ServicesDrawer({
   onClose,
   onNavigateHome,
   onNavigateCasual,
+  onOpenMenu,
 }: ServicesDrawerProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -41,14 +42,14 @@ export function ServicesDrawer({
   if (!isOpen) return null
 
   const handleItemClick = (item: string) => {
-    if (item === 'ABOUT') {
-      return
-    }
     if (item === 'HOME' && onNavigateHome) {
       onNavigateHome()
     }
     if (item === 'CASUAL WEAR' && onNavigateCasual) {
       onNavigateCasual()
+    }
+    if (item === 'ABOUT' && onOpenMenu) {
+      onOpenMenu()
     }
     onClose()
   }
