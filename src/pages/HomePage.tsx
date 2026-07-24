@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react'
 import { CategoryGrid } from '../components/CategoryGrid'
 import { CreationsSection } from '../components/CreationsSection'
 import { FallWinterSection } from '../components/FallWinterSection'
-import SuitsGrid from '../components/men/SuitsGrid.jsx'
+// import SuitsGrid from '../components/men/SuitsGrid.jsx'
 import FullFooter from './Footer.jsx'
 import { Header } from '../components/Header'
 import { HeroSection } from '../components/HeroSection'
 import { MenuDrawer } from '../components/MenuDrawer'
-import { TraditionalWearSection } from '../components/TraditionalWearSection'
+import { ServicesDrawer } from '../components/ServicesDrawer'
+// import { TraditionalWearSection } from '../components/TraditionalWearSection'
 
 type HomePageProps = {
   onOpenLogin?: () => void
@@ -38,6 +39,7 @@ export function HomePage({
 }: HomePageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isServicesOpen, setIsServicesOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 8)
@@ -52,7 +54,7 @@ export function HomePage({
     <div className="min-h-screen bg-paper text-ink">
       <Header
         isScrolled={isScrolled}
-        onMenuOpen={() => setIsMenuOpen(true)}
+        onMenuOpen={() => setIsServicesOpen(true)}
         onOpenLogin={onOpenLogin}
         onOpenRegister={onOpenRegister}
       />
@@ -84,19 +86,26 @@ export function HomePage({
         }}
         onGoHome={onGoHome}
       />
+      <ServicesDrawer
+        isOpen={isServicesOpen}
+        onClose={() => setIsServicesOpen(false)}
+        onNavigateHome={onGoHome}
+        onNavigateCasual={onNavigateCasual}
+        onNavigateAbout={onNavigateAbout}
+      />
       <main>
         <HeroSection />
         <CreationsSection />
         <CategoryGrid />
-        <FallWinterSection />
-        <TraditionalWearSection />
+        <FallWinterSection videoOnly />
+        {/* <TraditionalWearSection /> */}
 
         {/* FRONTEND1 sections included to make homepage a fullsite */}
-        <SuitsGrid />
+        {/* <SuitsGrid /> */}
       </main>
 
       {/* Use the fullsite Footer from the pages folder (FRONTEND1) */}
-      <FullFooter onNavigateAbout={onNavigateAbout} />
+      <FullFooter onNavigateAbout={onNavigateAbout} onOpenServices={() => setIsMenuOpen(true)} />
     </div>
   )
 }
