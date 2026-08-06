@@ -11,8 +11,11 @@ import { SocksPage } from './pages/SocksPage'
 import { TraditionalWearPage } from './pages/TraditionalWearPage'
 import { AboutPage } from './pages/AboutPage'
 import { CartPage } from './pages/CartPage'
+import HelpPage from './pages/HelpPage'
+import { SearchResultsPage } from './pages/SearchResultsPage'
+import { SearchProvider } from './context/SearchContext'
 
-type View = 'home' | 'login' | 'register' | 'casual' | 'suit' | 'office' | 'street' | 'traditional' | 'underwear' | 'socks' | 'about' | 'cart'
+type View = 'home' | 'login' | 'register' | 'casual' | 'suit' | 'office' | 'street' | 'traditional' | 'underwear' | 'socks' | 'about' | 'help' | 'cart' | 'search'
 
 type CartProduct = {
   name: string
@@ -23,22 +26,26 @@ type CartProduct = {
 function App() {
   const [view, setView] = useState<View>('home')
   const [cartProduct, setCartProduct] = useState<CartProduct | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const openCart = (product: CartProduct) => {
     setCartProduct(product)
     setView('cart')
   }
 
+  const openSearchResults = (query: string) => {
+    setSearchQuery(query)
+    setView('search')
+  }
+
+  let content: JSX.Element
+
   if (view === 'login') {
-    return <LoginPage onGoHome={() => setView('home')} onClose={() => setView('home')} />
-  }
-
-  if (view === 'register') {
-    return <RegisterPage onGoHome={() => setView('home')} onClose={() => setView('home')} />
-  }
-
-if (view === 'casual') {
-    return (
+    content = <LoginPage onGoHome={() => setView('home')} onClose={() => setView('home')} />
+  } else if (view === 'register') {
+    content = <RegisterPage onGoHome={() => setView('home')} onClose={() => setView('home')} />
+  } else if (view === 'casual') {
+    content = (
       <CasualWearPage
         onOpenLogin={() => setView('login')}
         onOpenRegister={() => setView('register')}
@@ -50,13 +57,12 @@ if (view === 'casual') {
         onNavigateUnderwear={() => setView('underwear')}
         onNavigateSocks={() => setView('socks')}
         onNavigateAbout={() => setView('about')}
+        onNavigateHelp={() => setView('help')}
         onOpenCart={openCart}
       />
     )
-  }
-
-if (view === 'suit') {
-    return (
+  } else if (view === 'suit') {
+    content = (
       <SuitWearPage
         onOpenLogin={() => setView('login')}
         onOpenRegister={() => setView('register')}
@@ -68,14 +74,13 @@ if (view === 'suit') {
         onNavigateUnderwear={() => setView('underwear')}
         onNavigateSocks={() => setView('socks')}
         onNavigateAbout={() => setView('about')}
+        onNavigateHelp={() => setView('help')}
         onOpenCart={openCart}
       />
     )
-  }
-
-if (view === 'office') {
-    return (
-     <OfficeWearPage
+  } else if (view === 'office') {
+    content = (
+      <OfficeWearPage
         onOpenLogin={() => setView('login')}
         onOpenRegister={() => setView('register')}
         onGoHome={() => setView('home')}
@@ -85,30 +90,28 @@ if (view === 'office') {
         onNavigateTraditional={() => setView('traditional')}
         onNavigateUnderwear={() => setView('underwear')}
         onNavigateSocks={() => setView('socks')}
+        onNavigateHelp={() => setView('help')}
         onOpenCart={openCart}
       />
     )
-  }
-
-  if (view === 'street') {
-    return (
-     <StreetWearPage
-  onOpenLogin={() => setView('login')}
-  onOpenRegister={() => setView('register')}
-  onGoHome={() => setView('home')}
-  onNavigateCasual={() => setView('casual')}
-  onNavigateSuit={() => setView('suit')}
-  onNavigateOffice={() => setView('office')}
-  onNavigateTraditional={() => setView('traditional')}
-  onNavigateUnderwear={() => setView('underwear')}
-  onNavigateSocks={() => setView('socks')}
-  onOpenCart={openCart}
-/>
+  } else if (view === 'street') {
+    content = (
+      <StreetWearPage
+        onOpenLogin={() => setView('login')}
+        onOpenRegister={() => setView('register')}
+        onGoHome={() => setView('home')}
+        onNavigateCasual={() => setView('casual')}
+        onNavigateSuit={() => setView('suit')}
+        onNavigateOffice={() => setView('office')}
+        onNavigateTraditional={() => setView('traditional')}
+        onNavigateUnderwear={() => setView('underwear')}
+        onNavigateSocks={() => setView('socks')}
+        onNavigateHelp={() => setView('help')}
+        onOpenCart={openCart}
+      />
     )
-  }
-
-  if (view === 'traditional') {
-    return (
+  } else if (view === 'traditional') {
+    content = (
       <TraditionalWearPage
         onOpenLogin={() => setView('login')}
         onOpenRegister={() => setView('register')}
@@ -119,13 +122,12 @@ if (view === 'office') {
         onNavigateStreet={() => setView('street')}
         onNavigateUnderwear={() => setView('underwear')}
         onNavigateSocks={() => setView('socks')}
+        onNavigateHelp={() => setView('help')}
         onOpenCart={openCart}
       />
     )
-  }
-
- if (view === 'underwear') {
-    return (
+  } else if (view === 'underwear') {
+    content = (
       <UnderwearPage
         onOpenLogin={() => setView('login')}
         onOpenRegister={() => setView('register')}
@@ -136,13 +138,12 @@ if (view === 'office') {
         onNavigateStreet={() => setView('street')}
         onNavigateTraditional={() => setView('traditional')}
         onNavigateSocks={() => setView('socks')}
+        onNavigateHelp={() => setView('help')}
         onOpenCart={openCart}
       />
     )
-  }
-
- if (view === 'socks') {
-    return (
+  } else if (view === 'socks') {
+    content = (
       <SocksPage
         onOpenLogin={() => setView('login')}
         onOpenRegister={() => setView('register')}
@@ -153,13 +154,12 @@ if (view === 'office') {
         onNavigateStreet={() => setView('street')}
         onNavigateUnderwear={() => setView('underwear')}
         onNavigateTraditional={() => setView('traditional')}
+        onNavigateHelp={() => setView('help')}
         onOpenCart={openCart}
       />
     )
-  }
-
-  if (view === 'about') {
-    return (
+  } else if (view === 'about') {
+    content = (
       <AboutPage
         onOpenLogin={() => setView('login')}
         onOpenRegister={() => setView('register')}
@@ -171,12 +171,46 @@ if (view === 'office') {
         onNavigateTraditional={() => setView('traditional')}
         onNavigateUnderwear={() => setView('underwear')}
         onNavigateSocks={() => setView('socks')}
+        onNavigateHelp={() => setView('help')}
       />
     )
-  }
-
-  if (view === 'cart') {
-    return (
+  } else if (view === 'help') {
+    content = (
+      <HelpPage
+        onOpenLogin={() => setView('login')}
+        onOpenRegister={() => setView('register')}
+        onGoHome={() => setView('home')}
+        onNavigateCasual={() => setView('casual')}
+        onNavigateSuit={() => setView('suit')}
+        onNavigateOffice={() => setView('office')}
+        onNavigateStreet={() => setView('street')}
+        onNavigateTraditional={() => setView('traditional')}
+        onNavigateUnderwear={() => setView('underwear')}
+        onNavigateSocks={() => setView('socks')}
+        onNavigateAbout={() => setView('about')}
+        onNavigateHelp={() => setView('help')}
+      />
+    )
+  } else if (view === 'search') {
+    content = (
+      <SearchResultsPage
+        query={searchQuery}
+        onSubmitSearch={openSearchResults}
+        onGoHome={() => setView('home')}
+        onNavigateCasual={() => setView('casual')}
+        onNavigateSuit={() => setView('suit')}
+        onNavigateOffice={() => setView('office')}
+        onNavigateStreet={() => setView('street')}
+        onNavigateTraditional={() => setView('traditional')}
+        onNavigateUnderwear={() => setView('underwear')}
+        onNavigateSocks={() => setView('socks')}
+        onNavigateAbout={() => setView('about')}
+        onNavigateHelp={() => setView('help')}
+        onOpenRegister={() => setView('register')}
+      />
+    )
+  } else if (view === 'cart') {
+    content = (
       <CartPage
         productName={cartProduct?.name}
         productPrice={cartProduct?.price}
@@ -193,23 +227,26 @@ if (view === 'office') {
         onNavigateSocks={() => setView('socks')}
       />
     )
+  } else {
+    content = (
+      <HomePage
+        onOpenLogin={() => setView('login')}
+        onOpenRegister={() => setView('register')}
+        onNavigateCasual={() => setView('casual')}
+        onNavigateSuit={() => setView('suit')}
+        onNavigateOffice={() => setView('office')}
+        onNavigateStreet={() => setView('street')}
+        onNavigateTraditional={() => setView('traditional')}
+        onNavigateUnderwear={() => setView('underwear')}
+        onNavigateSocks={() => setView('socks')}
+        onNavigateAbout={() => setView('about')}
+        onNavigateHelp={() => setView('help')}
+        onGoHome={() => setView('home')}
+      />
+    )
   }
 
-  return (
-    <HomePage
-      onOpenLogin={() => setView('login')}
-      onOpenRegister={() => setView('register')}
-      onNavigateCasual={() => setView('casual')}
-      onNavigateSuit={() => setView('suit')}
-      onNavigateOffice={() => setView('office')}
-      onNavigateStreet={() => setView('street')}
-      onNavigateTraditional={() => setView('traditional')}
-      onNavigateUnderwear={() => setView('underwear')}
-      onNavigateSocks={() => setView('socks')}
-      onNavigateAbout={() => setView('about')}
-      onGoHome={() => setView('home')}
-    />
-  )
+  return <SearchProvider onSubmitSearch={openSearchResults}>{content}</SearchProvider>
 }
 
 export default App

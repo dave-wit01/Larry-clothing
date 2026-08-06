@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
+import { ServicesDrawer } from '../components/ServicesDrawer'
 import { TraditionalWearSection } from '../components/TraditionalWearSection'
 import FullFooter from './Footer.jsx'
 
@@ -20,6 +21,7 @@ type TraditionalWearPageProps = {
   onNavigateStreet?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
+  onNavigateHelp?: () => void
   onOpenCart?: (product: CartProduct) => void
 }
 
@@ -33,6 +35,7 @@ export function TraditionalWearPage({
   onNavigateStreet,
   onNavigateUnderwear,
   onNavigateSocks,
+  onNavigateHelp,
   onOpenCart,
 }: TraditionalWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -80,10 +83,18 @@ export function TraditionalWearPage({
           }
         }}
       />
+
+      <ServicesDrawer
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onNavigateHome={onGoHome}
+        onNavigateCasual={onNavigateCasual}
+        onOpenMenu={() => setIsMenuOpen(true)}
+      />
       <main>
         <TraditionalWearSection onSelectItem={onOpenCart} />
       </main>
-      <FullFooter />
+      <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>
   )
 }

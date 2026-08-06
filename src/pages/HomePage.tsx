@@ -21,6 +21,7 @@ type HomePageProps = {
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
   onNavigateAbout?: () => void
+  onNavigateHelp?: () => void
   onGoHome?: () => void
 }
 
@@ -35,6 +36,7 @@ export function HomePage({
   onNavigateUnderwear,
   onNavigateSocks,
   onNavigateAbout,
+  onNavigateHelp,
   onGoHome,
 }: HomePageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -105,7 +107,7 @@ export function HomePage({
       </main>
 
       {/* Use the fullsite Footer from the pages folder (FRONTEND1) */}
-      <FullFooter onNavigateAbout={onNavigateAbout} onOpenServices={() => setIsMenuOpen(true)} />
+      <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>
   )
 }

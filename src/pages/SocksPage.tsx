@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
+import { ServicesDrawer } from '../components/ServicesDrawer'
 import { SocksSection } from '../components/SocksSection'
 import FullFooter from './Footer.jsx'
 
@@ -14,6 +15,7 @@ type SocksPageProps = {
   onNavigateStreet?: () => void
   onNavigateUnderwear?: () => void
   onNavigateTraditional?: () => void
+  onNavigateHelp?: () => void
   onOpenCart?: (product: { name: string; price: number; image: string }) => void
 }
 
@@ -27,6 +29,7 @@ export function SocksPage({
   onNavigateStreet,
   onNavigateUnderwear,
   onNavigateTraditional,
+  onNavigateHelp,
   onOpenCart,
 }: SocksPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -74,10 +77,18 @@ export function SocksPage({
           }
         }}
       />
+
+      <ServicesDrawer
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onNavigateHome={onGoHome}
+        onNavigateCasual={onNavigateCasual}
+        onOpenMenu={() => setIsMenuOpen(true)}
+      />
       <main>
         <SocksSection onSelectItem={onOpenCart} />
       </main>
-      <FullFooter />
+      <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>
   )
 }

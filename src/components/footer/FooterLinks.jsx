@@ -1,9 +1,9 @@
-export default function FooterLinks({ onNavigateAbout, onOpenServices }) {
+export default function FooterLinks({ onNavigateAbout, onNavigateHelp, onOpenServices, onOpenRegister }) {
   const footerLinks = [
-    { label: 'Help', action: null },
+    { label: 'Help', action: () => { if (onNavigateHelp) onNavigateHelp() } },
     { label: 'Services', action: () => { if (onOpenServices) onOpenServices() } },
     { label: 'About COSLARRY', action: () => { console.log('About clicked, onNavigateAbout is:', onNavigateAbout); if (onNavigateAbout) onNavigateAbout(); } },
-    { label: 'Email Sign-up', action: null },
+    { label: 'Email Sign-up', action: () => { if (onOpenRegister) onOpenRegister() } },
   ]
 
   return (

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
+import { ServicesDrawer } from '../components/ServicesDrawer'
 import FullFooter from './Footer.jsx'
 
 type AboutPageProps = {
@@ -14,6 +15,7 @@ type AboutPageProps = {
   onNavigateTraditional?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
+  onNavigateHelp?: () => void
 }
 
 export function AboutPage({
@@ -27,6 +29,7 @@ export function AboutPage({
   onNavigateTraditional,
   onNavigateUnderwear,
   onNavigateSocks,
+  onNavigateHelp,
 }: AboutPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -77,6 +80,14 @@ export function AboutPage({
         }}
       />
 
+      <ServicesDrawer
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onNavigateHome={onGoHome}
+        onNavigateCasual={onNavigateCasual}
+        onOpenMenu={() => setIsMenuOpen(true)}
+      />
+
       <main className="flex flex-col items-center px-6 py-10 text-center">
         <h1 className="text-2xl font-medium tracking-wide mb-10">About COSLAARY</h1>
 
@@ -115,7 +126,7 @@ export function AboutPage({
         </section>
       </main>
 
-      <FullFooter />
+      <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>
   )
 }

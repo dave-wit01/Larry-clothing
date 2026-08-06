@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
+import { ServicesDrawer } from '../components/ServicesDrawer'
 import { OfficeWearSection } from '../components/OfficeWearSection'
 import FullFooter from './Footer.jsx'
 
@@ -14,6 +15,7 @@ type OfficeWearPageProps = {
   onNavigateTraditional?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
+  onNavigateHelp?: () => void
   onOpenCart?: (product: { name: string; price: number; image: string }) => void
 }
 
@@ -27,6 +29,7 @@ export function OfficeWearPage({
   onNavigateTraditional,
   onNavigateUnderwear,
   onNavigateSocks,
+  onNavigateHelp,
   onOpenCart,
 }: OfficeWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -74,10 +77,18 @@ export function OfficeWearPage({
           }
         }}
       />
+
+      <ServicesDrawer
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onNavigateHome={onGoHome}
+        onNavigateCasual={onNavigateCasual}
+        onOpenMenu={() => setIsMenuOpen(true)}
+      />
       <main>
         <OfficeWearSection onSelectItem={onOpenCart} />
       </main>
-      <FullFooter />
+      <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>
   )
 }

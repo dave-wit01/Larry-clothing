@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
+import { ServicesDrawer } from '../components/ServicesDrawer'
 import { UnderwearSection } from '../components/UnderwearSection'
 import FullFooter from './Footer.jsx'
 
@@ -15,6 +16,7 @@ type UnderwearPageProps = {
   onNavigateTraditional?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
+  onNavigateHelp?: () => void
   onOpenCart?: (product: { name: string; price: number; image: string }) => void
 }
 
@@ -29,6 +31,7 @@ export function UnderwearPage({
   onNavigateTraditional,
   onNavigateUnderwear,
   onNavigateSocks,
+  onNavigateHelp,
   onOpenCart,
 }: UnderwearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -79,10 +82,18 @@ export function UnderwearPage({
           }
         }}
       />
+
+      <ServicesDrawer
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onNavigateHome={onGoHome}
+        onNavigateCasual={onNavigateCasual}
+        onOpenMenu={() => setIsMenuOpen(true)}
+      />
       <main>
         <UnderwearSection onSelectItem={onOpenCart} />
       </main>
-      <FullFooter />
+      <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>
   )
 }

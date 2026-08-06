@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
+import { ServicesDrawer } from '../components/ServicesDrawer'
 import { CasualWearSection } from '../components/CasualWearSection'
 import FullFooter from './Footer.jsx'
 
@@ -21,6 +22,7 @@ type CasualWearPageProps = {
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
   onNavigateAbout?: () => void
+  onNavigateHelp?: () => void
   onOpenCart?: (product: CartProduct) => void
 }
 
@@ -35,6 +37,7 @@ export function CasualWearPage({
   onNavigateUnderwear,
   onNavigateSocks,
   onNavigateAbout,
+  onNavigateHelp,
   onOpenCart,
 }: CasualWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -85,10 +88,18 @@ export function CasualWearPage({
           }
         }}
       />
+
+      <ServicesDrawer
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onNavigateHome={onGoHome}
+        onNavigateCasual={onNavigateCasual}
+        onOpenMenu={() => setIsMenuOpen(true)}
+      />
       <main>
         <CasualWearSection onSelectItem={onOpenCart} />
       </main>
-      <FullFooter onNavigateAbout={onNavigateAbout} />
+      <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>
   )
 }

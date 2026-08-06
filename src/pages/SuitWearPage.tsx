@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
+import { ServicesDrawer } from '../components/ServicesDrawer'
 import { SuitWearSection } from '../components/SuitWearSection'
 import FullFooter from './Footer.jsx'
 
@@ -15,6 +16,7 @@ type SuitWearPageProps = {
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
   onNavigateAbout?: () => void
+  onNavigateHelp?: () => void
   onOpenCart?: (product: { name: string; price: number; image: string }) => void
 }
 
@@ -29,6 +31,7 @@ export function SuitWearPage({
   onNavigateUnderwear,
   onNavigateSocks,
   onNavigateAbout,
+  onNavigateHelp,
   onOpenCart,
 }: SuitWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -79,10 +82,18 @@ export function SuitWearPage({
           }
         }}
       />
+
+      <ServicesDrawer
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onNavigateHome={onGoHome}
+        onNavigateCasual={onNavigateCasual}
+        onOpenMenu={() => setIsMenuOpen(true)}
+      />
       <main>
         <SuitWearSection onSelectItem={onOpenCart} />
       </main>
-      <FullFooter onNavigateAbout={onNavigateAbout} />
+      <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>
   )
 }

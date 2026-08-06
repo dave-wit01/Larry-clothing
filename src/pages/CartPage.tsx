@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
+import { ServicesDrawer } from '../components/ServicesDrawer'
 import { Heart, ShoppingCart } from 'lucide-react'
+import FullFooter from './Footer.jsx'
 
 type CartPageProps = {
   productName?: string
@@ -72,6 +74,14 @@ export function CartPage({
         }}
       />
 
+      <ServicesDrawer
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onNavigateHome={onGoHome}
+        onNavigateCasual={onNavigateCasual}
+        onOpenMenu={() => setIsMenuOpen(true)}
+      />
+
       <p className="text-center text-lg font-medium py-3">Cart</p>
 
       {productImage && (
@@ -110,7 +120,6 @@ export function CartPage({
           <ShoppingCart size={18} strokeWidth={1.5} />
           BUY NOW
         </button>
-      </div>
-    </div>
+      </div>      <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />    </div>
   )
 }
