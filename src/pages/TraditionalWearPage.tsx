@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
 import { ServicesDrawer } from '../components/ServicesDrawer'
-import { TraditionalWearSection } from '../components/TraditionalWearSection'
+import { ProductCatalog } from '../components/ProductCatalog'
+import { traditionalProducts } from '../data/catalogProducts'
 import FullFooter from './Footer.jsx'
 
 type CartProduct = {
@@ -21,6 +22,7 @@ type TraditionalWearPageProps = {
   onNavigateStreet?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
+  onNavigateAbout?: () => void
   onNavigateHelp?: () => void
   onOpenCart?: (product: CartProduct) => void
 }
@@ -35,8 +37,8 @@ export function TraditionalWearPage({
   onNavigateStreet,
   onNavigateUnderwear,
   onNavigateSocks,
+  onNavigateAbout,
   onNavigateHelp,
-  onOpenCart,
 }: TraditionalWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -57,9 +59,11 @@ export function TraditionalWearPage({
         onMenuOpen={() => setIsMenuOpen(true)}
         onOpenLogin={onOpenLogin}
         onOpenRegister={onOpenRegister}
+        onGoHome={onGoHome}
       />
       <MenuDrawer
         isOpen={isMenuOpen}
+        isVisible={false}
         onClose={() => setIsMenuOpen(false)}
         onGoHome={onGoHome}
         onNavigate={(link) => {
@@ -81,6 +85,9 @@ export function TraditionalWearPage({
           if (link === 'Socks' && onNavigateSocks) {
             onNavigateSocks()
           }
+          if (link === 'About CosLaary' && onNavigateAbout) {
+            onNavigateAbout()
+          }
         }}
       />
 
@@ -92,7 +99,7 @@ export function TraditionalWearPage({
         onOpenMenu={() => setIsMenuOpen(true)}
       />
       <main>
-        <TraditionalWearSection onSelectItem={onOpenCart} />
+        <ProductCatalog title="Traditional outfit" products={traditionalProducts} />
       </main>
       <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>

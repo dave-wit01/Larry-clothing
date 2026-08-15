@@ -16,8 +16,9 @@ type UnderwearPageProps = {
   onNavigateTraditional?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
+  onNavigateAbout?: () => void
   onNavigateHelp?: () => void
-  onOpenCart?: (product: { name: string; price: number; image: string }) => void
+  onCheckout?: (product: { name: string; price: number; image: string }) => void
 }
 
 export function UnderwearPage({
@@ -31,8 +32,9 @@ export function UnderwearPage({
   onNavigateTraditional,
   onNavigateUnderwear,
   onNavigateSocks,
+  onNavigateAbout,
   onNavigateHelp,
-  onOpenCart,
+  onCheckout,
 }: UnderwearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -53,9 +55,11 @@ export function UnderwearPage({
         onMenuOpen={() => setIsMenuOpen(true)}
         onOpenLogin={onOpenLogin}
         onOpenRegister={onOpenRegister}
+        onGoHome={onGoHome}
       />
       <MenuDrawer
         isOpen={isMenuOpen}
+        isVisible={false}
         onClose={() => setIsMenuOpen(false)}
         onGoHome={onGoHome}
         onNavigate={(link) => {
@@ -80,6 +84,9 @@ export function UnderwearPage({
           if (link === 'Socks' && onNavigateSocks) {
             onNavigateSocks()
           }
+          if (link === 'About CosLaary' && onNavigateAbout) {
+            onNavigateAbout()
+          }
         }}
       />
 
@@ -91,7 +98,7 @@ export function UnderwearPage({
         onOpenMenu={() => setIsMenuOpen(true)}
       />
       <main>
-        <UnderwearSection onSelectItem={onOpenCart} />
+        <UnderwearSection onBuyNow={onCheckout} />
       </main>
       <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>

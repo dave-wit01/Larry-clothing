@@ -18,7 +18,6 @@ export const menuLinks: Record<MenuCategory, string[]> = {
     'Traditional Outfit',
     'Underwear',
     'Socks',
-    'About CosLaary',
   ],
 
 }

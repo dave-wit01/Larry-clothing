@@ -10,7 +10,8 @@ describe('MenuDrawer', () => {
 
     render(<MenuDrawer isOpen onClose={() => {}} onNavigate={onNavigate} />)
 
-    await user.click(screen.getByRole('link', { name: /traditional outfit/i }))
+    await user.click(screen.getByRole('button', { name: /men/i }))
+    await user.click(screen.getByRole('button', { name: /traditional outfit/i }))
 
     expect(onNavigate).toHaveBeenCalledWith('Traditional Outfit')
   })

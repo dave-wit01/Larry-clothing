@@ -2,13 +2,11 @@ import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
 import { ServicesDrawer } from '../components/ServicesDrawer'
-import { Heart, ShoppingCart } from 'lucide-react'
+import { Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react'
 import FullFooter from './Footer.jsx'
+import { useCart } from '../context/CartContext'
 
 type CartPageProps = {
-  productName?: string
-  productPrice?: number
-  productImage?: string
   onOpenLogin?: () => void
   onOpenRegister?: () => void
   onGoHome?: () => void
@@ -19,14 +17,14 @@ type CartPageProps = {
   onNavigateTraditional?: () => void
   onNavigateUnderwear?: () => void
   onNavigateSocks?: () => void
+  onNavigateAbout?: () => void
+  onNavigateHelp?: () => void
+  onCheckout?: (items: Array<{ id: string; name: string; price: number; image: string; quantity: number; size: number }>) => void
 }
 
 const SIZES = [44, 46, 48, 50, 54, 56, 58, 60]
 
 export function CartPage({
-  productName = 'Double-breasted Tailored Jacket',
-  productPrice = 250,
-  productImage,
   onOpenLogin,
   onOpenRegister,
   onGoHome,
@@ -37,10 +35,16 @@ export function CartPage({
   onNavigateTraditional,
   onNavigateUnderwear,
   onNavigateSocks,
+  onNavigateAbout,
+  onNavigateHelp,
+  onCheckout,
 }: CartPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [selectedSize, setSelectedSize] = useState(50)
+  const [selectedSizes, setSelectedSizes] = useState<Record<string, number>>({})
+  const { items, removeItem, setQuantity } = useCart()
+  const cartItems = items
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 8)
@@ -58,9 +62,11 @@ export function CartPage({
         onMenuOpen={() => setIsMenuOpen(true)}
         onOpenLogin={onOpenLogin}
         onOpenRegister={onOpenRegister}
+        onGoHome={onGoHome}
       />
       <MenuDrawer
         isOpen={isMenuOpen}
+        isVisible={false}
         onClose={() => setIsMenuOpen(false)}
         onGoHome={onGoHome}
         onNavigate={(link) => {
@@ -71,6 +77,7 @@ export function CartPage({
           if (link === 'Traditional Outfit' && onNavigateTraditional) onNavigateTraditional()
           if (link === 'Underwear' && onNavigateUnderwear) onNavigateUnderwear()
           if (link === 'Socks' && onNavigateSocks) onNavigateSocks()
+          if (link === 'About CosLaary' && onNavigateAbout) onNavigateAbout()
         }}
       />
 
@@ -84,42 +91,21 @@ export function CartPage({
 
       <p className="text-center text-lg font-medium py-3">Cart</p>
 
-      {productImage && (
-        <div className="w-full aspect-[4/3] overflow-hidden">
-          <img src={productImage} alt={productName} className="h-full w-full object-cover" />
-        </div>
-      )}
-
       <div className="px-6 py-6">
-        <div className="flex items-start justify-between">
-          <h1 className="text-lg font-medium max-w-[70%]">{productName}</h1>
-          <Heart size={20} strokeWidth={1.5} />
-        </div>
-        <p className="text-2xl font-bold mt-2">$ {productPrice}</p>
-
-        <p className="text-sm text-ink/70 mt-6">Sizes....</p>
-        <div className="border-t border-line mt-2 mb-4" />
-
-        <div className="grid grid-cols-4 gap-3 max-w-sm">
-          {SIZES.map((size) => (
-            <button
-              key={size}
-              onClick={() => setSelectedSize(size)}
-              className={`h-12 rounded-md text-sm font-medium transition-colors ${
-                selectedSize === size
-                  ? 'bg-ink text-paper'
-                  : 'bg-parchment text-ink hover:bg-line/60'
-              }`}
-            >
-              {size}
-            </button>
-          ))}
-        </div>
-
-        <button className="mt-10 w-full max-w-sm mx-auto flex items-center justify-center gap-2 rounded-full bg-parchment py-4 text-sm font-medium tracking-wide text-ink/70 block">
+        {cartItems.length === 0 ? <p className="py-12 text-center text-ink/70">Your cart is empty.</p> : cartItems.map((item) => (
+          <section key={item.id} className="mb-8 border-b border-line pb-8">
+            <div className="flex gap-4">
+              <img src={item.image} alt={item.name} className="h-28 w-24 rounded-lg object-cover" />
+              <div className="flex-1"><div className="flex items-start justify-between gap-3"><h1 className="text-lg font-medium">{item.name}</h1><button type="button" className="rounded-full p-2 text-ink transition hover:bg-line/60" aria-label={`Remove ${item.name} from cart`} onClick={() => removeItem(item.id)}><Trash2 size={19} strokeWidth={1.5} /></button></div><p className="mt-2 text-xl font-bold">${(item.price * item.quantity).toFixed(2)}</p><div className="mt-3 inline-flex items-center rounded-full border border-line bg-white"><button type="button" className="flex h-8 w-8 items-center justify-center rounded-l-full hover:bg-parchment" aria-label={`Decrease ${item.name} quantity`} onClick={() => setQuantity(item.id, item.quantity - 1)}><Minus size={15} /></button><span className="min-w-8 text-center text-sm font-medium" aria-label={`${item.quantity} ${item.name}`}>{item.quantity}</span><button type="button" className="flex h-8 w-8 items-center justify-center rounded-r-full hover:bg-parchment" aria-label={`Increase ${item.name} quantity`} onClick={() => setQuantity(item.id, item.quantity + 1)}><Plus size={15} /></button></div></div>
+            </div>
+            <p className="mt-5 text-sm text-ink/70">Choose size</p>
+            <div className="mt-2 grid grid-cols-4 gap-2 max-w-sm">{SIZES.map((size) => <button key={size} type="button" onClick={() => setSelectedSizes((current) => ({ ...current, [item.id]: size }))} className={`h-10 rounded-md text-sm font-medium ${selectedSizes[item.id] === size ? 'bg-ink text-paper' : 'bg-parchment text-ink hover:bg-line/60'}`}>{size}</button>)}</div>
+          </section>
+        ))}
+        {cartItems.length > 0 && <><div className="mb-4 flex max-w-sm justify-between text-lg font-semibold"><span>Total</span><span>${total.toFixed(2)}</span></div><button type="button" disabled={cartItems.some((item) => !selectedSizes[item.id])} onClick={() => onCheckout?.(cartItems.map((item) => ({ id: item.id, name: item.name, price: item.price, image: item.image, quantity: item.quantity, size: selectedSizes[item.id] })))} className="w-full max-w-sm mx-auto flex items-center justify-center gap-2 rounded-full bg-ink py-4 text-sm font-medium tracking-wide text-paper transition hover:bg-emerald disabled:cursor-not-allowed disabled:bg-ink/40 block">
           <ShoppingCart size={18} strokeWidth={1.5} />
-          BUY NOW
-        </button>
+          {cartItems.some((item) => !selectedSizes[item.id]) ? 'SELECT A SIZE FOR EVERY ITEM' : 'CHECKOUT'}
+        </button></>}
       </div>      <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />    </div>
   )
 }

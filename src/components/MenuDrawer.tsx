@@ -1,20 +1,22 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Home, Search, User, X } from 'lucide-react'
 import { menuLinks } from '../data/navigation'
 import { BrandLogo } from './BrandLogo'
 
 type MenuDrawerProps = {
   isOpen: boolean
+  isVisible?: boolean
   onClose: () => void
   onNavigate?: (link: string) => void
   onGoHome?: () => void
 }
 
-export function MenuDrawer({ isOpen, onClose, onNavigate, onGoHome }: MenuDrawerProps) {
+export function MenuDrawer({ isOpen, isVisible = true, onClose, onNavigate, onGoHome }: MenuDrawerProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const [isMenOpen, setIsMenOpen] = useState(false)
 
   useEffect(() => {
-    if (!isOpen) return undefined
+    if (!isOpen || !isVisible) return undefined
 
     const originalOverflow = document.body.style.overflow
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -29,9 +31,9 @@ export function MenuDrawer({ isOpen, onClose, onNavigate, onGoHome }: MenuDrawer
       document.body.style.overflow = originalOverflow
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [isOpen, onClose])
+  }, [isOpen, isVisible, onClose])
 
-  if (!isOpen) return null
+  if (!isOpen || !isVisible) return null
 
   return (
     <div
@@ -73,7 +75,11 @@ export function MenuDrawer({ isOpen, onClose, onNavigate, onGoHome }: MenuDrawer
           className="flex h-14 w-14 items-center justify-center justify-self-center overflow-hidden rounded-full bg-ink transition-transform duration-150 active:scale-95 sm:h-16 sm:w-16"
           href="#top"
           aria-label="Larry Clothing home"
-          onClick={onClose}
+          onClick={(event) => {
+            event.preventDefault()
+            onGoHome?.()
+            onClose()
+          }}
         >
           <BrandLogo className="h-full w-full" />
         </a>
@@ -89,34 +95,37 @@ export function MenuDrawer({ isOpen, onClose, onNavigate, onGoHome }: MenuDrawer
 
       <main className="mx-auto flex min-h-[calc(100vh-88px)] max-w-6xl flex-col px-7 pb-6 pt-5 sm:px-8 lg:px-10">
         <div className="w-full max-w-[30rem]">
-          <div className="inline-flex items-center rounded-full bg-[#d3d3d3] px-5 py-2 text-lg font-medium leading-none text-ink shadow-sm sm:text-xl">
-            Men
-          </div>
+          <button
+            type="button"
+            className="inline-flex items-center rounded-full bg-[#d3d3d3] px-5 py-2 text-lg font-medium leading-none text-ink shadow-sm transition hover:bg-[#c3c3c3] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald sm:text-xl"
+            aria-expanded={isMenOpen}
+            aria-controls="men-collection"
+            onClick={() => setIsMenOpen((open) => !open)}
+          >
+            Men <span className="ml-2 text-sm" aria-hidden="true">{isMenOpen ? '−' : '+'}</span>
+          </button>
 
-          <nav className="mt-14 sm:mt-16" aria-label="Men collection">
-            <ul className="space-y-9 sm:space-y-10">
-              {menuLinks.Men.map((link) => (
-                <li key={link}>
-                  <a
-                    className="inline-block border-b-2 border-transparent pb-1 text-lg leading-none transition-all duration-150 hover:border-emerald hover:text-emerald active:scale-[0.97] active:text-emerald active:border-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald sm:text-xl"
-                    href="#creations"
-                    onClick={(event) => {
-                    if (
-                      (link === 'Casual wear' || link === 'Suit wear' || link === 'Office wear' || link === 'Street wear' || link === 'Traditional Outfit' || link === 'Underwear' || link === 'Socks' || link === 'About CosLaary') &&
-                      onNavigate
-                    ) {
-                        event.preventDefault()
-                        onNavigate(link)
-                      }
-                      onClose()
-                    }}
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          {isMenOpen && (
+            <nav id="men-collection" className="mt-14 sm:mt-16" aria-label="Men collection">
+              <ul className="space-y-9 sm:space-y-10">
+                {menuLinks.Men.map((link) => (
+                  <li key={link}>
+                    <button
+                      type="button"
+                      className="inline-block border-b-2 border-transparent pb-1 text-left text-lg leading-none transition-all duration-150 hover:border-emerald hover:text-emerald active:scale-[0.97] active:text-emerald active:border-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald sm:text-xl"
+                      onClick={() => {
+                        onNavigate?.(link)
+                        onClose()
+                      }}
+                    >
+                      {link}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+
         </div>
         <a
           className="mt-auto self-center border-b border-ink/70 text-sm text-ink/70 transition-all duration-150 hover:border-ink hover:text-ink active:scale-95 active:text-emerald active:border-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald"

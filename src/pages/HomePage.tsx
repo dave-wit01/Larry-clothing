@@ -59,9 +59,11 @@ export function HomePage({
         onMenuOpen={() => setIsServicesOpen(true)}
         onOpenLogin={onOpenLogin}
         onOpenRegister={onOpenRegister}
+        onGoHome={onGoHome}
       />
       <MenuDrawer
         isOpen={isMenuOpen}
+        isVisible={false}
         onClose={() => setIsMenuOpen(false)}
         onNavigate={(link) => {
           if (link === 'Casual wear' && onNavigateCasual) {
@@ -107,7 +109,7 @@ export function HomePage({
       </main>
 
       {/* Use the fullsite Footer from the pages folder (FRONTEND1) */}
-      <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
+      <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsServicesOpen(true)} onOpenRegister={onOpenRegister} />
     </div>
   )
 }

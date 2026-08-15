@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
 import { ServicesDrawer } from '../components/ServicesDrawer'
-import { SocksSection } from '../components/SocksSection'
+import { ProductCatalog } from '../components/ProductCatalog'
+import { socksProducts } from '../data/catalogProducts'
 import FullFooter from './Footer.jsx'
 
 type SocksPageProps = {
@@ -16,6 +17,7 @@ type SocksPageProps = {
   onNavigateUnderwear?: () => void
   onNavigateTraditional?: () => void
   onNavigateHelp?: () => void
+  onNavigateAbout?: () => void
   onOpenCart?: (product: { name: string; price: number; image: string }) => void
 }
 
@@ -30,7 +32,7 @@ export function SocksPage({
   onNavigateUnderwear,
   onNavigateTraditional,
   onNavigateHelp,
-  onOpenCart,
+  onNavigateAbout,
 }: SocksPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -51,9 +53,11 @@ export function SocksPage({
         onMenuOpen={() => setIsMenuOpen(true)}
         onOpenLogin={onOpenLogin}
         onOpenRegister={onOpenRegister}
+        onGoHome={onGoHome}
       />
       <MenuDrawer
         isOpen={isMenuOpen}
+        isVisible={false}
         onClose={() => setIsMenuOpen(false)}
         onGoHome={onGoHome}
         onNavigate={(link) => {
@@ -75,6 +79,9 @@ export function SocksPage({
           if (link === 'Traditional Outfit' && onNavigateTraditional) {
             onNavigateTraditional()
           }
+          if (link === 'About CosLaary' && onNavigateAbout) {
+            onNavigateAbout()
+          }
         }}
       />
 
@@ -86,7 +93,7 @@ export function SocksPage({
         onOpenMenu={() => setIsMenuOpen(true)}
       />
       <main>
-        <SocksSection onSelectItem={onOpenCart} />
+        <ProductCatalog title="Socks" products={socksProducts} />
       </main>
       <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>

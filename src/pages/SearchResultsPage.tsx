@@ -64,9 +64,11 @@ export function SearchResultsPage({
         onMenuOpen={() => setIsMenuOpen(true)}
         onOpenLogin={undefined}
         onOpenRegister={onOpenRegister}
+        onGoHome={onGoHome}
       />
       <MenuDrawer
         isOpen={isMenuOpen}
+        isVisible={false}
         onClose={() => setIsMenuOpen(false)}
         onGoHome={onGoHome}
         onNavigate={(link) => {

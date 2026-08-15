@@ -1,18 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Menu, Search, User, X } from 'lucide-react'
+import { ArrowLeft, Menu, Search, ShoppingBag, User, X } from 'lucide-react'
 import { AccountMenu } from './AccountMenu'
 import { BrandLogo } from './BrandLogo'
 import { getSearchSuggestions } from '../data/searchData'
 import { useSearch } from '../context/SearchContext'
+import { useCart } from '../context/CartContext'
+import { useBackNavigation } from '../context/NavigationContext'
 
 type HeaderProps = {
   isScrolled: boolean
   onMenuOpen: () => void
   onOpenLogin?: () => void
   onOpenRegister?: () => void
+  onGoHome?: () => void
 }
 
-export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister }: HeaderProps) {
+export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister, onGoHome }: HeaderProps) {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -21,6 +24,9 @@ export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister }: 
   const inputRef = useRef<HTMLInputElement | null>(null)
   const searchContainerRef = useRef<HTMLDivElement | null>(null)
   const searchContext = useSearch()
+  const { items, openCart } = useCart()
+  const cartItemCount = items.reduce((total, item) => total + item.quantity, 0)
+  const goBack = useBackNavigation()
 
   const suggestions = useMemo(
     () => (debouncedQuery.length >= 2 ? getSearchSuggestions(debouncedQuery) : []),
@@ -128,33 +134,55 @@ export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister }: 
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
-        <button
-          className="icon-button"
-          type="button"
-          aria-label="Open menu"
-          onClick={onMenuOpen}
-        >
-          <Menu size={18} strokeWidth={1.5} />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            className="icon-button"
+            type="button"
+            aria-label="Go back to the previous page"
+            onClick={goBack ?? undefined}
+            disabled={!goBack}
+          >
+            <ArrowLeft size={18} strokeWidth={1.5} />
+          </button>
+          <button
+            className="icon-button"
+            type="button"
+            aria-label="Open menu"
+            onClick={onMenuOpen}
+          >
+            <Menu size={18} strokeWidth={1.5} />
+          </button>
+        </div>
 
         <a
           className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-ink sm:h-16 sm:w-16"
           href="#top"
           aria-label="Larry Clothing home"
+          onClick={(event) => {
+            event.preventDefault()
+            onGoHome?.()
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
         >
           <BrandLogo className="h-full w-full" />
         </a>
 
-        <button
-          className="icon-button border-transparent hover:border-transparent"
-          type="button"
-          aria-label="Open account"
-          aria-expanded={isAccountMenuOpen}
-          aria-controls="account-menu"
-          onClick={() => setIsAccountMenuOpen((isOpen) => !isOpen)}
-        >
-          <User size={20} strokeWidth={1.5} />
-        </button>
+        <div className="flex items-center gap-1">
+          <button className="icon-button relative border-transparent hover:border-transparent" type="button" aria-label={`Open cart, ${cartItemCount} items`} onClick={openCart}>
+            <ShoppingBag size={20} strokeWidth={1.5} />
+            {cartItemCount > 0 && <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald px-1 text-[10px] text-paper">{cartItemCount}</span>}
+          </button>
+          <button
+            className="icon-button border-transparent hover:border-transparent"
+            type="button"
+            aria-label="Open account"
+            aria-expanded={isAccountMenuOpen}
+            aria-controls="account-menu"
+            onClick={() => setIsAccountMenuOpen((isOpen) => !isOpen)}
+          >
+            <User size={20} strokeWidth={1.5} />
+          </button>
+        </div>
       </div>
 
       <div className="mx-auto max-w-6xl px-5 pb-5 sm:px-8 lg:px-10">
