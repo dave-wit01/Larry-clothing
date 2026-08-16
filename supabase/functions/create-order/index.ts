@@ -23,13 +23,16 @@ async function hash(value: string) {
 }
 
 Deno.serve(async (request) => {
-  const allowedOrigin = Deno.env.get('ALLOWED_ORIGIN')
+  const allowedOrigins = (Deno.env.get('ALLOWED_ORIGIN') ?? '')
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean)
   const origin = request.headers.get('origin') ?? ''
-  const responseOrigin = allowedOrigin && origin === allowedOrigin ? origin : ''
+  const responseOrigin = allowedOrigins.includes(origin) ? origin : ''
 
   if (request.method === 'OPTIONS') return new Response(null, { headers: { 'Access-Control-Allow-Origin': responseOrigin, 'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type', 'Vary': 'Origin' } })
   if (request.method !== 'POST') return json({ error: 'Method not allowed.' }, 405, responseOrigin)
-  if (!allowedOrigin || origin !== allowedOrigin) return json({ error: 'Origin not allowed.' }, 403, responseOrigin)
+  if (allowedOrigins.length === 0 || !responseOrigin) return json({ error: 'Origin not allowed.' }, 403, responseOrigin)
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
