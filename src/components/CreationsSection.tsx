@@ -21,6 +21,8 @@ export function CreationsSection() {
                 className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 src={creation.imageUrl}
                 alt={creation.title}
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-4 py-4 sm:px-5 sm:py-5">

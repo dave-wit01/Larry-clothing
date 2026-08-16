@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef } from 'react'
-import menSuitImage from '../assets/men suit 2.jpg'
+import menSuitImage from '../assets/men-suit-2.optimized.jpg'
 import menSuitCategoryImage from '../assets/menSuitCategory.jpg'
-import menSuitRedStarImage from '../assets/menSuitCategory2.jpg'
+import menSuitRedStarImage from '../assets/menSuitCategory2.optimized.jpg'
 import menSuitPinstripeImage from '../assets/menSuitCategory3.jpg'
 import menSuitCreamImage from '../assets/menSuitCategory4.jpg'
 import menSuitShortsDetailImage from '../assets/menSuitCategory5.jpg'
@@ -80,6 +80,8 @@ export function CategoryGrid({
               <img
                 src={item.imageUrl}
                 alt={item.label}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
             </div>

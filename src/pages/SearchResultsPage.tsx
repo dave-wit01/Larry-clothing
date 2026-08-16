@@ -208,7 +208,7 @@ export function SearchResultsPage({
               <div className="grid gap-4 sm:grid-cols-2">
                 {results.map((item) => (
                   <article key={item.id} className="overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-sm">
-                    <img src={item.image} alt={item.name} className="h-52 w-full object-cover" />
+                    <img src={item.image} alt={item.name} loading="lazy" decoding="async" className="h-52 w-full object-cover" />
                     <div className="p-4">
                       <p className="text-xs uppercase tracking-[0.25em] text-ink/60">{item.category}</p>
                       <h3 className="mt-2 text-lg font-semibold text-ink">{item.name}</h3>

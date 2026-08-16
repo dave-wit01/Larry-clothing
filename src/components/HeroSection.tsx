@@ -17,6 +17,8 @@ export function HeroSection() {
           className="h-full w-full object-cover object-top"
           src={homepageHeroImage}
           alt="Two models in tailored high-summer looks on an architectural staircase"
+          fetchPriority="high"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 px-5 pb-10 sm:px-10 sm:pb-14 lg:px-16 lg:pb-20">

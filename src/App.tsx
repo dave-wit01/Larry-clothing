@@ -1,25 +1,28 @@
-import { useRef, useState } from 'react'
+import { lazy, Suspense, useRef, useState } from 'react'
 import type { ReactElement } from 'react'
 import { HomePage } from './pages/HomePage'
-import { LoginPage } from './pages/LoginPage'
-import { RegisterPage } from './pages/RegisterPage'
-import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
-import { ResetPasswordPage } from './pages/ResetPasswordPage'
-import { CasualWearPage } from './pages/CasualWearPage'
-import { SuitWearPage } from './pages/SuitWearPage'
-import { OfficeWearPage } from './pages/OfficeWearPage'
-import { StreetWearPage } from './pages/StreetWearPage'
-import { UnderwearPage } from './pages/UnderwearPage'
-import { SocksPage } from './pages/SocksPage'
-import { TraditionalWearPage } from './pages/TraditionalWearPage'
-import { AboutPage } from './pages/AboutPage'
-import { CartPage } from './pages/CartPage'
-import { CheckoutPage } from './pages/CheckoutPage'
-import HelpPage from './pages/HelpPage'
-import { SearchResultsPage } from './pages/SearchResultsPage'
 import { SearchProvider } from './context/SearchContext'
 import { NavigationProvider } from './context/NavigationContext'
 import { CartProvider } from './context/CartContext'
+
+// Keep the first visit focused on the homepage. Other screens are fetched only
+// when a visitor opens them, so their code and image URLs do not delay first paint.
+const LoginPage = lazy(() => import('./pages/LoginPage').then((module) => ({ default: module.LoginPage })))
+const RegisterPage = lazy(() => import('./pages/RegisterPage').then((module) => ({ default: module.RegisterPage })))
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage').then((module) => ({ default: module.ForgotPasswordPage })))
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage').then((module) => ({ default: module.ResetPasswordPage })))
+const CasualWearPage = lazy(() => import('./pages/CasualWearPage').then((module) => ({ default: module.CasualWearPage })))
+const SuitWearPage = lazy(() => import('./pages/SuitWearPage').then((module) => ({ default: module.SuitWearPage })))
+const OfficeWearPage = lazy(() => import('./pages/OfficeWearPage').then((module) => ({ default: module.OfficeWearPage })))
+const StreetWearPage = lazy(() => import('./pages/StreetWearPage').then((module) => ({ default: module.StreetWearPage })))
+const UnderwearPage = lazy(() => import('./pages/UnderwearPage').then((module) => ({ default: module.UnderwearPage })))
+const SocksPage = lazy(() => import('./pages/SocksPage').then((module) => ({ default: module.SocksPage })))
+const TraditionalWearPage = lazy(() => import('./pages/TraditionalWearPage').then((module) => ({ default: module.TraditionalWearPage })))
+const AboutPage = lazy(() => import('./pages/AboutPage').then((module) => ({ default: module.AboutPage })))
+const CartPage = lazy(() => import('./pages/CartPage').then((module) => ({ default: module.CartPage })))
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage').then((module) => ({ default: module.CheckoutPage })))
+const HelpPage = lazy(() => import('./pages/HelpPage'))
+const SearchResultsPage = lazy(() => import('./pages/SearchResultsPage').then((module) => ({ default: module.SearchResultsPage })))
 
 type View = 'home' | 'login' | 'register' | 'forgot-password' | 'reset-password' | 'casual' | 'suit' | 'office' | 'street' | 'traditional' | 'underwear' | 'socks' | 'about' | 'help' | 'cart' | 'checkout' | 'search'
 
@@ -270,7 +273,11 @@ function App() {
   return (
     <NavigationProvider navigate={setView} onBack={goBack}>
       <CartProvider onOpenCart={openCart} onBuyNow={openCart}>
-        <SearchProvider onSubmitSearch={openSearchResults}>{content}</SearchProvider>
+        <SearchProvider onSubmitSearch={openSearchResults}>
+          <Suspense fallback={<main className="min-h-screen bg-paper" aria-busy="true" />}>
+            {content}
+          </Suspense>
+        </SearchProvider>
       </CartProvider>
     </NavigationProvider>
   )

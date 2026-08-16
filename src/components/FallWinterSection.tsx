@@ -1,5 +1,6 @@
-import type { ComponentPropsWithoutRef } from 'react'
+import { useEffect, useRef, useState, type ComponentPropsWithoutRef } from 'react'
 import homepageVideo from '../assets/homepage-video.mp4'
+import homepagePoster from '../assets/Homepage1.jpg'
 
 type FeatureItem = {
   id: string
@@ -35,11 +36,39 @@ export function FallWinterSection({
   eyebrow = 'Men',
   heading = 'Fall-Winter 2026',
   videoSrc = homepageVideo,
-  poster = 'https://picsum.photos/id/1027/1600/1000',
+  poster = homepagePoster,
   features = defaultFeatures,
   videoOnly = false,
   ...sectionProps
 }: FallWinterSectionProps) {
+  const videoContainerRef = useRef<HTMLDivElement>(null)
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false)
+
+  useEffect(() => {
+    const container = videoContainerRef.current
+    if (!container) return
+
+    // Older browsers and the test DOM do not provide this API; in that case
+    // preserve the previous autoplay behaviour instead of leaving a blank video.
+    if (!('IntersectionObserver' in window)) {
+      setShouldLoadVideo(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoadVideo(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '500px 0px' },
+    )
+
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <section
       className="w-full bg-paper text-ink"
@@ -47,15 +76,16 @@ export function FallWinterSection({
       {...sectionProps}
     >
       <div className="pb-14 sm:pb-20">
-        <div className="relative h-[46vh] min-h-[320px] w-full overflow-hidden sm:h-[60vh] lg:h-[78vh]">
+        <div ref={videoContainerRef} className="relative h-[46vh] min-h-[320px] w-full overflow-hidden sm:h-[60vh] lg:h-[78vh]">
           <video
             className="h-full w-full object-cover"
-            src={videoSrc}
+            src={shouldLoadVideo ? videoSrc : undefined}
             poster={poster}
             autoPlay
             muted
             loop
             playsInline
+            preload="none"
             aria-label={`${eyebrow} ${heading} runway film`}
           />
         </div>
@@ -76,6 +106,8 @@ export function FallWinterSection({
                     <img
                       src={item.imageUrl}
                       alt={item.label}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                   </div>
