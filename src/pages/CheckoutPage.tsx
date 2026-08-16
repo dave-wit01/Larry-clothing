@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { supabase } from '../lib/supabase'
 import { buildWhatsAppOrderLink } from '../lib/whatsapp'
 import { useCart } from '../context/CartContext'
 
@@ -22,37 +21,16 @@ export function CheckoutPage({ items = [], onGoHome }: CheckoutPageProps) {
     event.preventDefault()
     const businessPhoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER
 
-    if (!businessPhoneNumber || !supabase) {
-      setCheckoutError('Checkout is not configured yet. Please contact us for help.')
+    if (!businessPhoneNumber) {
+      setCheckoutError('WhatsApp ordering is not configured yet. Please contact us for help.')
       return
     }
 
     setCheckoutError('')
     setIsSubmitting(true)
-
-    try {
-      const { data, error } = await supabase.functions.invoke('create-order', {
-        body: {
-          items: items.map(({ id, quantity, size }) => ({ id, quantity, size })),
-          customer,
-        },
-      })
-
-      if (error) {
-        const errorBody = error.context instanceof Response
-          ? await error.context.json().catch(() => null)
-          : null
-        throw new Error(typeof errorBody?.error === 'string' ? errorBody.error : 'Could not save your order.')
-      }
-      if (!data?.orderId || !Array.isArray(data.items)) throw new Error(data?.error ?? 'Could not save your order.')
-
-      const link = buildWhatsAppOrderLink({ phoneNumber: businessPhoneNumber, items: data.items, customer, orderId: data.orderId })
-      clearCart()
-      window.location.assign(link)
-    } catch (error) {
-      setCheckoutError(error instanceof Error ? error.message : 'We could not save your order. Please try again before opening WhatsApp.')
-      setIsSubmitting(false)
-    }
+    const link = buildWhatsAppOrderLink({ phoneNumber: businessPhoneNumber, items, customer })
+    clearCart()
+    window.location.assign(link)
   }
 
   return (

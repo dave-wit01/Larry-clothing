@@ -21,14 +21,14 @@ export function buildWhatsAppOrderLink({
   phoneNumber: string
   items: WhatsAppOrderItem[]
   customer: WhatsAppCustomer
-  orderId: string
+  orderId?: string
 }) {
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const orderItems = items.map(
     (item) => `- ${item.quantity}x ${item.name}${item.size ? ` (Size ${item.size})` : ''} - $${(item.price * item.quantity).toFixed(2)}`
   )
   const lines = [
-    `New order: ${orderId}`,
+    ...(orderId ? [`New order: ${orderId}`] : ['New order']),
     `Name: ${customer.name}`,
     `Phone: ${customer.phone}`,
     `Delivery address: ${customer.address}`,

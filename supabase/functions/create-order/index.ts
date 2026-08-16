@@ -10,6 +10,7 @@ const json = (body: unknown, status = 200, origin = '') => new Response(JSON.str
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Vary': 'Origin',
   },
 })
@@ -30,7 +31,7 @@ Deno.serve(async (request) => {
   const origin = request.headers.get('origin') ?? ''
   const responseOrigin = allowedOrigins.includes(origin) ? origin : ''
 
-  if (request.method === 'OPTIONS') return new Response(null, { headers: { 'Access-Control-Allow-Origin': responseOrigin, 'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type', 'Vary': 'Origin' } })
+  if (request.method === 'OPTIONS') return new Response(null, { headers: { 'Access-Control-Allow-Origin': responseOrigin, 'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Vary': 'Origin' } })
   if (request.method !== 'POST') return json({ error: 'Method not allowed.' }, 405, responseOrigin)
   if (allowedOrigins.length === 0 || !responseOrigin) return json({ error: 'Origin not allowed.' }, 403, responseOrigin)
 
