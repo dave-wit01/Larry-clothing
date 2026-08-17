@@ -16,6 +16,6 @@ const make = (prefix: string, names: string[], images: string[]): CatalogProduct
 export const casualProducts = make('casual', ['Monogram T-Shirt', 'Weekend Overshirt', 'Relaxed Cotton Trouser', 'Signature Casual Jacket'], [casual1, casual2])
 export const officeProducts = make('office', ['Executive Blazer', 'Tailored Office Trouser', 'Classic Work Shirt', 'Professional Vest'], [office1, office2])
 export const suitProducts = make('suit', ['Modern Two-Piece Suit', 'Double Breasted Suit', 'Evening Tailored Jacket', 'Formal Suit Trouser'], [suit1])
-export const streetProducts = make('street', ['Graphic Street Jacket', 'Relaxed Cargo Trouser', 'Streetwear Overshirt', 'Urban Layered Set'], [street1, street2, street3])
+export const streetProducts = make('street', ['Graphic Street Jacket', 'Relaxed Cargo Trouser', 'Streetwear Overshirt', 'Urban Layered Set', 'Signature Jersey'], [street1, street2, street3])
 export const traditionalProducts = make('traditional', ['Traditional Kaftan Set', 'Heritage Tunic', 'Classic Traditional Set', 'Tailored Native Wear'], [traditional1, traditional2, traditional3])
 export const socksProducts = make('socks', ['Everyday Cotton Socks', 'Ribbed Comfort Socks', 'Classic Logo Socks', 'Premium Dress Socks'], [socks1])

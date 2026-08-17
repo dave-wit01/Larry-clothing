@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { Home, Search, User, X } from 'lucide-react'
-import { menuLinks } from '../data/navigation'
+import { CircleCheck, CircleX, Home, Search, User, X } from 'lucide-react'
+import { menCollections } from '../data/navigation'
 import { BrandLogo } from './BrandLogo'
 
 type MenuDrawerProps = {
@@ -107,19 +107,31 @@ export function MenuDrawer({ isOpen, isVisible = true, onClose, onNavigate, onGo
 
           {isMenOpen && (
             <nav id="men-collection" className="mt-14 sm:mt-16" aria-label="Men collection">
-              <ul className="space-y-9 sm:space-y-10">
-                {menuLinks.Men.map((link) => (
-                  <li key={link}>
+              <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-emerald">Disseminate</p>
+              <ul className="space-y-6 sm:space-y-7">
+                {menCollections.filter((item) => item.status === 'available').map((item) => (
+                  <li key={item.label}>
                     <button
                       type="button"
-                      className="inline-block border-b-2 border-transparent pb-1 text-left text-lg leading-none transition-all duration-150 hover:border-emerald hover:text-emerald active:scale-[0.97] active:text-emerald active:border-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald sm:text-xl"
+                      className="inline-flex items-center gap-3 border-b-2 border-transparent pb-1 text-left text-lg leading-none transition-all duration-150 hover:border-emerald hover:text-emerald active:scale-[0.97] active:text-emerald active:border-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald sm:text-xl"
                       onClick={() => {
-                        onNavigate?.(link)
+                        onNavigate?.(item.navigationLabel ?? item.label)
                         onClose()
                       }}
                     >
-                      {link}
+                      <CircleCheck className="text-emerald" size={20} strokeWidth={1.8} aria-hidden="true" />
+                      {item.label}
                     </button>
+                  </li>
+                ))}
+              </ul>
+              <p className="mb-5 mt-12 text-xs font-medium uppercase tracking-[0.2em] text-red-600">Impending unpublished</p>
+              <ul className="space-y-5 sm:space-y-6">
+                {menCollections.filter((item) => item.status === 'coming-soon').map((item) => (
+                  <li key={item.label} className="inline-flex items-center gap-3 text-lg leading-none text-ink/45 sm:text-xl">
+                    <CircleX className="shrink-0 text-red-600" size={20} strokeWidth={1.8} aria-hidden="true" />
+                    <span>{item.label}</span>
+                    <span className="text-xs uppercase tracking-wider text-red-600">Coming soon</span>
                   </li>
                 ))}
               </ul>

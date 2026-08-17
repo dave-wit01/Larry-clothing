@@ -1,8 +1,10 @@
+import { formatPrice } from './currency'
+
 type WhatsAppOrderItem = {
   name: string
   price: number
   quantity: number
-  size?: number
+  size?: string
 }
 
 type WhatsAppCustomer = {
@@ -25,7 +27,7 @@ export function buildWhatsAppOrderLink({
 }) {
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const orderItems = items.map(
-    (item) => `- ${item.quantity}x ${item.name}${item.size ? ` (Size ${item.size})` : ''} - $${(item.price * item.quantity).toFixed(2)}`
+    (item) => `- ${item.quantity}x ${item.name}${item.size ? ` (Size ${item.size})` : ''} - ${formatPrice(item.price * item.quantity)}`
   )
   const lines = [
     ...(orderId ? [`New order: ${orderId}`] : ['New order']),
@@ -37,7 +39,7 @@ export function buildWhatsAppOrderLink({
     'Items:',
     ...orderItems,
     '',
-    `Total: $${total.toFixed(2)}`,
+    `Total: ${formatPrice(total)}`,
   ]
 
   return `https://wa.me/${phoneNumber.replace(/\D/g, '')}?text=${encodeURIComponent(lines.join('\n'))}`

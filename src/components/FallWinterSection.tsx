@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState, type ComponentPropsWithoutRef } from 'react'
-import homepageVideo from '../assets/homepage-video.mp4'
-import homepagePoster from '../assets/Homepage1.jpg'
+import { type ComponentPropsWithoutRef } from 'react'
+import homepageImage from '../assets/Homepage4.jpg'
 
 type FeatureItem = {
   id: string
@@ -11,10 +10,9 @@ type FeatureItem = {
 type FallWinterSectionProps = {
   eyebrow?: string
   heading?: string
-  videoSrc?: string
-  poster?: string
+  imageSrc?: string
   features?: FeatureItem[]
-  videoOnly?: boolean
+  imageOnly?: boolean
 } & Omit<ComponentPropsWithoutRef<'section'>, 'children'>
 
 import mensuitImage from '../assets/mensuit0.1.jpg'
@@ -35,40 +33,11 @@ const defaultFeatures: FeatureItem[] = [
 export function FallWinterSection({
   eyebrow = 'Men',
   heading = 'Fall-Winter 2026',
-  videoSrc = homepageVideo,
-  poster = homepagePoster,
+  imageSrc = homepageImage,
   features = defaultFeatures,
-  videoOnly = false,
+  imageOnly = false,
   ...sectionProps
 }: FallWinterSectionProps) {
-  const videoContainerRef = useRef<HTMLDivElement>(null)
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false)
-
-  useEffect(() => {
-    const container = videoContainerRef.current
-    if (!container) return
-
-    // Older browsers and the test DOM do not provide this API; in that case
-    // preserve the previous autoplay behaviour instead of leaving a blank video.
-    if (!('IntersectionObserver' in window)) {
-      setShouldLoadVideo(true)
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldLoadVideo(true)
-          observer.disconnect()
-        }
-      },
-      { rootMargin: '500px 0px' },
-    )
-
-    observer.observe(container)
-    return () => observer.disconnect()
-  }, [])
-
   return (
     <section
       className="w-full bg-paper text-ink"
@@ -76,21 +45,17 @@ export function FallWinterSection({
       {...sectionProps}
     >
       <div className="pb-14 sm:pb-20">
-        <div ref={videoContainerRef} className="relative h-[46vh] min-h-[320px] w-full overflow-hidden sm:h-[60vh] lg:h-[78vh]">
-          <video
+        <div className="relative h-[46vh] min-h-[320px] w-full overflow-hidden sm:h-[60vh] lg:h-[78vh]">
+          <img
             className="h-full w-full object-cover"
-            src={shouldLoadVideo ? videoSrc : undefined}
-            poster={poster}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="none"
-            aria-label={`${eyebrow} ${heading} runway film`}
+            src={imageSrc}
+            alt={`${eyebrow} ${heading} collection`}
+            fetchPriority="high"
+            decoding="async"
           />
         </div>
 
-        {!videoOnly && (
+        {!imageOnly && (
           <>
             <div className="mx-auto max-w-6xl px-5 pt-10 text-center sm:px-8 sm:pt-14 lg:px-10">
               <p className="text-xs font-medium uppercase tracking-[0.25em] text-ink/70">{eyebrow}</p>

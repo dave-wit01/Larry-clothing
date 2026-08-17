@@ -1,11 +1,12 @@
-import { creations } from '../data/creations'
+import { creations } from '../data/creations';
 
-export function CreationsSection() {
+type CreationsSectionProps = {
+  onOpenCollection: () => void;
+};
+
+export function CreationsSection({ onOpenCollection }: CreationsSectionProps) {
   return (
-    <section
-      id="creations"
-      className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-20 lg:px-10"
-    >
+    <section id="creations" className="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-20 lg:px-10">
       <h2 className="mx-auto max-w-2xl text-center font-display text-2xl font-medium leading-snug sm:text-3xl lg:text-4xl">
         Explore a selection of CosLaary Creations
       </h2>
@@ -29,21 +30,20 @@ export function CreationsSection() {
               <p className="text-[10px] uppercase tracking-[0.2em] text-white/80 sm:text-xs">
                 {creation.label}
               </p>
-              <p className="font-display text-base text-white sm:text-lg">
-                {creation.title}
-              </p>
+              <p className="font-display text-base text-white sm:text-lg">{creation.title}</p>
             </div>
           </a>
         ))}
       </div>
       <div className="mt-10 flex justify-center sm:mt-14">
-        <a
+        <button
+          type="button"
           className="rounded-full border border-ink px-8 py-3 text-xs uppercase tracking-[0.2em] transition-colors hover:bg-ink hover:text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald"
-          href="#top"
+          onClick={onOpenCollection}
         >
           View All Creations
-        </a>
+        </button>
       </div>
     </section>
-  )
+  );
 }

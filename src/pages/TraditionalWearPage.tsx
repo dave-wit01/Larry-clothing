@@ -101,7 +101,7 @@ export function TraditionalWearPage({
       <main>
         <ProductCatalog title="Traditional outfit" products={traditionalProducts} />
       </main>
-      <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
+      <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>
   )
 }

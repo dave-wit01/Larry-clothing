@@ -91,8 +91,6 @@ export function AboutPage({
       />
 
       <main className="flex flex-col items-center px-6 py-10 text-center">
-        <h1 className="text-2xl font-medium tracking-wide mb-10">About COSLAARY</h1>
-
         <section className="max-w-md mb-10">
           <h2 className="text-sm font-medium tracking-widest mb-4">About Us</h2>
           <p className="text-sm leading-relaxed text-ink/80">

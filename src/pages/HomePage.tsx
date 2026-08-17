@@ -1,29 +1,30 @@
-import { useEffect, useState } from 'react'
-import { CategoryGrid } from '../components/CategoryGrid'
-import { CreationsSection } from '../components/CreationsSection'
-import { FallWinterSection } from '../components/FallWinterSection'
+import { useEffect, useState } from 'react';
+import { CategoryGrid } from '../components/CategoryGrid';
+import { CreationsSection } from '../components/CreationsSection';
+import { CreationsMenu } from '../components/CreationsMenu';
+import { FallWinterSection } from '../components/FallWinterSection';
 // import SuitsGrid from '../components/men/SuitsGrid.jsx'
-import FullFooter from './Footer.jsx'
-import { Header } from '../components/Header'
-import { HeroSection } from '../components/HeroSection'
-import { MenuDrawer } from '../components/MenuDrawer'
-import { ServicesDrawer } from '../components/ServicesDrawer'
+import FullFooter from './Footer.jsx';
+import { Header } from '../components/Header';
+import { HeroSection } from '../components/HeroSection';
+import { MenuDrawer } from '../components/MenuDrawer';
+import { ServicesDrawer } from '../components/ServicesDrawer';
 // import { TraditionalWearSection } from '../components/TraditionalWearSection'
 
 type HomePageProps = {
-  onOpenLogin?: () => void
-  onOpenRegister?: () => void
-  onNavigateCasual?: () => void
-  onNavigateSuit?: () => void
-  onNavigateOffice?: () => void
-  onNavigateStreet?: () => void
-  onNavigateTraditional?: () => void
-  onNavigateUnderwear?: () => void
-  onNavigateSocks?: () => void
-  onNavigateAbout?: () => void
-  onNavigateHelp?: () => void
-  onGoHome?: () => void
-}
+  onOpenLogin?: () => void;
+  onOpenRegister?: () => void;
+  onNavigateCasual?: () => void;
+  onNavigateSuit?: () => void;
+  onNavigateOffice?: () => void;
+  onNavigateStreet?: () => void;
+  onNavigateTraditional?: () => void;
+  onNavigateUnderwear?: () => void;
+  onNavigateSocks?: () => void;
+  onNavigateAbout?: () => void;
+  onNavigateHelp?: () => void;
+  onGoHome?: () => void;
+};
 
 export function HomePage({
   onOpenLogin,
@@ -39,18 +40,34 @@ export function HomePage({
   onNavigateHelp,
   onGoHome,
 }: HomePageProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isServicesOpen, setIsServicesOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isCreationsMenuOpen, setIsCreationsMenuOpen] = useState(false);
+
+  const navigateToCreationCategory = (category: string) => {
+    const navigation = {
+      'Casual wear': onNavigateCasual,
+      'Office wear': onNavigateOffice,
+      'Suit wear': onNavigateSuit,
+      'Street wear': onNavigateStreet,
+      'Traditional Outfit': onNavigateTraditional,
+      Underwear: onNavigateUnderwear,
+      Socks: onNavigateSocks,
+    };
+
+    navigation[category as keyof typeof navigation]?.();
+    setIsCreationsMenuOpen(false);
+  };
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 8)
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
 
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-paper text-ink">
@@ -67,25 +84,25 @@ export function HomePage({
         onClose={() => setIsMenuOpen(false)}
         onNavigate={(link) => {
           if (link === 'Casual wear' && onNavigateCasual) {
-            onNavigateCasual()
+            onNavigateCasual();
           }
           if (link === 'Suit wear' && onNavigateSuit) {
-            onNavigateSuit()
+            onNavigateSuit();
           }
           if (link === 'Office wear' && onNavigateOffice) {
-            onNavigateOffice()
+            onNavigateOffice();
           }
           if (link === 'Street wear' && onNavigateStreet) {
-            onNavigateStreet()
+            onNavigateStreet();
           }
           if (link === 'Traditional Outfit' && onNavigateTraditional) {
-            onNavigateTraditional()
+            onNavigateTraditional();
           }
           if (link === 'Underwear' && onNavigateUnderwear) {
-            onNavigateUnderwear()
+            onNavigateUnderwear();
           }
           if (link === 'Socks' && onNavigateSocks) {
-            onNavigateSocks()
+            onNavigateSocks();
           }
         }}
         onGoHome={onGoHome}
@@ -99,17 +116,28 @@ export function HomePage({
       />
       <main>
         <HeroSection />
-        <CreationsSection />
+        <CreationsSection onOpenCollection={() => setIsCreationsMenuOpen(true)} />
         <CategoryGrid />
-        <FallWinterSection videoOnly />
+        <FallWinterSection imageOnly />
         {/* <TraditionalWearSection /> */}
 
         {/* FRONTEND1 sections included to make homepage a fullsite */}
         {/* <SuitsGrid /> */}
       </main>
 
+      <CreationsMenu
+        isOpen={isCreationsMenuOpen}
+        onClose={() => setIsCreationsMenuOpen(false)}
+        onNavigate={navigateToCreationCategory}
+      />
+
       {/* Use the fullsite Footer from the pages folder (FRONTEND1) */}
-      <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsServicesOpen(true)} onOpenRegister={onOpenRegister} />
+      <FullFooter
+        onNavigateAbout={onNavigateAbout}
+        onNavigateHelp={onNavigateHelp}
+        onOpenServices={() => setIsServicesOpen(true)}
+        onOpenRegister={onOpenRegister}
+      />
     </div>
-  )
+  );
 }

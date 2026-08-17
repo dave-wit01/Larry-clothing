@@ -1,13 +1,4 @@
-import streetImage1 from '../assets/Streetwear3.jpg'
-import streetImage2 from '../assets/Streetwear4.jpg'
-import officeImage1 from '../assets/Officewear1.jpg'
-import officeImage2 from '../assets/Officewear2.jpg'
-import suitImage1 from '../assets/menSuitCategory.jpg'
-import suitImage2 from '../assets/menSuitCategory2.optimized.jpg'
-import traditionImage1 from '../assets/traditional 1.jpg'
-import underwearImage1 from '../assets/underwear2.jpg'
-import socksImage1 from '../assets/socks1.jpg'
-import leatherImage from '../assets/women suit 1.jpg'
+import { casualProducts, streetProducts } from './catalogProducts'
 
 export type SearchProduct = {
   id: string
@@ -29,126 +20,40 @@ export type SearchSuggestion = {
 
 export const SEARCH_CATEGORIES = [
   'Casual wear',
-  'Office wear',
-  'Suit wear',
-  'Street wear',
-  'Traditional Outfit',
-  'Underwear',
-  'Socks',
+  'Streetwear',
+  'Jersey',
 ]
 
 export const TOP_SEARCH_TERMS = [
-  'Monogram jacket',
-  'Tailored suit',
+  'Streetwear',
+  'Jersey',
   'Leather goods',
-  'Luxury hoodie',
-  'Dress shirt',
-  'Travel bag',
-  'Evening wear',
+  'Monogram',
+  'Casual wear',
 ]
 
 const QUERY_ALIASES: Record<string, string> = {
   hoody: 'hoodie',
   hoodyie: 'hoodie',
-  hoodie: 'hoodie',
-  tshirt: 'tee',
-  shirt: 'shirt',
+  tshirt: 't shirt',
+  tee: 't shirt',
   laary: 'coslaary',
 }
 
 export const SEARCH_PRODUCTS: SearchProduct[] = [
-  {
-    id: 'prod-1',
-    name: 'Monogram Jacket',
-    category: 'Suit wear',
-    price: 420,
-    colors: ['Black', 'Navy', 'Cream'],
-    sizes: ['44', '46', '48', '50', '52'],
-    image: suitImage1,
-    isNew: true,
-  },
-  {
-    id: 'prod-2',
-    name: 'Tailored Suit',
-    category: 'Suit wear',
-    price: 560,
-    colors: ['Charcoal', 'Navy'],
-    sizes: ['46', '48', '50', '52'],
-    image: suitImage2,
-  },
-  {
-    id: 'prod-3',
-    name: 'Leather Tote',
+  ...casualProducts.map((product) => ({
+    ...product,
     category: 'Casual wear',
-    price: 320,
-    colors: ['Brown', 'Black'],
-    sizes: ['One size'],
-    image: leatherImage,
-  },
-  {
-    id: 'prod-4',
-    name: 'Street Hoodie',
-    category: 'Street wear',
-    price: 250,
+    colors: ['Black', 'Cream', 'Navy'],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+  })),
+  ...streetProducts.map((product) => ({
+    ...product,
+    category: product.name === 'Signature Jersey' ? 'Jersey' : 'Streetwear',
     colors: ['Black', 'Gray', 'Navy'],
-    sizes: ['M', 'L', 'XL'],
-    image: streetImage1,
-    isNew: true,
-  },
-  {
-    id: 'prod-5',
-    name: 'Street Tee',
-    category: 'Street wear',
-    price: 120,
-    colors: ['White', 'Black'],
-    sizes: ['M', 'L', 'XL'],
-    image: streetImage2,
-  },
-  {
-    id: 'prod-6',
-    name: 'Classic Office Shirt',
-    category: 'Office wear',
-    price: 180,
-    colors: ['White', 'Blue'],
-    sizes: ['M', 'L', 'XL'],
-    image: officeImage1,
-  },
-  {
-    id: 'prod-7',
-    name: 'Work Trousers',
-    category: 'Office wear',
-    price: 220,
-    colors: ['Gray', 'Navy'],
-    sizes: ['46', '48', '50', '52'],
-    image: officeImage2,
-  },
-  {
-    id: 'prod-8',
-    name: 'Traditional Kilt',
-    category: 'Traditional Outfit',
-    price: 410,
-    colors: ['Cream', 'Olive'],
-    sizes: ['S', 'M', 'L'],
-    image: traditionImage1,
-  },
-  {
-    id: 'prod-9',
-    name: 'Cotton Brief Pack',
-    category: 'Underwear',
-    price: 95,
-    colors: ['White', 'Black'],
-    sizes: ['S', 'M', 'L'],
-    image: underwearImage1,
-  },
-  {
-    id: 'prod-10',
-    name: 'Travel Socks',
-    category: 'Socks',
-    price: 40,
-    colors: ['Navy', 'Cream'],
-    sizes: ['One size'],
-    image: socksImage1,
-  },
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    isNew: product.name === 'Signature Jersey',
+  })),
 ]
 
 function normalizeQuery(query: string) {
@@ -168,14 +73,14 @@ function buildSearchTerms(query: string) {
     .filter(Boolean)
 }
 
-export function searchProducts(query: string) {
+export function searchProducts(query: string, products = SEARCH_PRODUCTS) {
   const terms = buildSearchTerms(query)
 
   if (!terms.length) {
-    return SEARCH_PRODUCTS
+    return products
   }
 
-  return SEARCH_PRODUCTS.filter((product) => {
+  return products.filter((product) => {
     const haystack = [product.name, product.category, ...product.colors].join(' ').toLowerCase()
     return terms.every((term) => haystack.includes(term))
   }).sort((a, b) => {

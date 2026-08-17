@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { X } from 'lucide-react';
-import { menuLinks } from '../data/navigation';
+import { CircleCheck, CircleX, X } from 'lucide-react';
+import { menCollections } from '../data/navigation';
 import { useNavigation } from '../context/NavigationContext';
 
 type ServicesDrawerProps = {
@@ -12,16 +12,12 @@ type ServicesDrawerProps = {
 };
 
 const topItems = ['HOME'];
-const bottomItems = ['CONTACT US', 'ABOUT COSLAARY'];
+const bottomItems = ['CONTACT US', ''];
 
 const menTargets = {
   'Casual wear': 'casual',
-  'Office wear': 'office',
-  'Suit wear': 'suit',
-  'Street wear': 'street',
-  'Traditional Outfit': 'traditional',
-  Underwear: 'underwear',
-  Socks: 'socks',
+  Streetwear: 'street',
+  Jersey: 'street',
   'About CosLaary': 'about',
 } as const;
 
@@ -137,15 +133,24 @@ export function ServicesDrawer({
                 id="services-men-collection"
                 className="border-t border-ink/10 bg-ink/[0.03] py-2"
               >
-                {menuLinks.Men.map((link) => (
-                  <li key={link}>
+                <li className="px-10 pb-2 pt-3 text-xs font-medium uppercase tracking-[0.16em] text-emerald">Disseminate</li>
+                {menCollections.filter((item) => item.status === 'available').map((item) => (
+                  <li key={item.label}>
                     <button
                       type="button"
-                      className="block w-full px-10 py-3 text-left text-sm font-medium transition-colors hover:bg-ink/5"
-                      onClick={() => handleMenNavigation(link as keyof typeof menTargets)}
+                      className="flex w-full items-center gap-2 px-10 py-3 text-left text-sm font-medium transition-colors hover:bg-ink/5"
+                      onClick={() => handleMenNavigation(item.label as keyof typeof menTargets)}
                     >
-                      {link}
+                      <CircleCheck className="text-emerald" size={16} strokeWidth={1.8} aria-hidden="true" />
+                      {item.label}
                     </button>
+                  </li>
+                ))}
+                <li className="px-10 pb-2 pt-6 text-xs font-medium uppercase tracking-[0.16em] text-red-600">Impending unpublished</li>
+                {menCollections.filter((item) => item.status === 'coming-soon').map((item) => (
+                  <li key={item.label} className="flex items-center gap-2 px-10 py-2 text-sm text-ink/45">
+                    <CircleX className="shrink-0 text-red-600" size={16} strokeWidth={1.8} aria-hidden="true" />
+                    <span>{item.label}</span>
                   </li>
                 ))}
               </ul>

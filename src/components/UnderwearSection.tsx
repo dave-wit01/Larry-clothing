@@ -2,6 +2,7 @@ import { Heart, ShoppingCart } from 'lucide-react'
 import { DEFAULT_UNDERWEAR_ROW, type UnderwearItem } from '../data/underwear'
 import { useState } from 'react'
 import { useCart } from '../context/CartContext'
+import { formatPrice } from '../lib/currency'
 
 type CartProduct = {
   id: string
@@ -72,7 +73,7 @@ export function UnderwearSection({
               </button>
               <h3 className="mt-3 min-h-10 text-sm font-semibold leading-tight text-ink sm:text-base">{item.name}</h3>
               <div className="mt-2 flex items-center justify-between gap-2">
-                <p className="text-lg font-semibold text-ink">${item.price.toFixed(2)}</p>
+                <p className="text-lg font-semibold text-ink">{formatPrice(item.price)}</p>
               </div>
               <div className="mt-3 grid grid-cols-[auto_1fr] gap-2">
                 <button type="button" className={`inline-flex h-9 w-9 items-center justify-center rounded-full border border-ink transition hover:bg-ink hover:text-paper ${isInCart ? 'bg-ink text-paper' : ''}`} onClick={() => toggleItem(cartProduct)} aria-label={`${isInCart ? 'Remove' : 'Add'} ${item.name} ${isInCart ? 'from' : 'to'} cart`} aria-pressed={isInCart}>

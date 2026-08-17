@@ -3,7 +3,7 @@ import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
 import { ServicesDrawer } from '../components/ServicesDrawer'
 import { ProductCatalog } from '../components/ProductCatalog'
-import { streetProducts } from '../data/catalogProducts'
+import { usePublishedProducts } from '../hooks/usePublishedProducts'
 import FullFooter from './Footer.jsx'
 
 type StreetWearPageProps = {
@@ -36,6 +36,7 @@ export function StreetWearPage({
 }: StreetWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const { products } = usePublishedProducts(['Streetwear', 'Jersey'])
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 8)
@@ -93,9 +94,9 @@ export function StreetWearPage({
         onOpenMenu={() => setIsMenuOpen(true)}
       />
       <main>
-        <ProductCatalog title="Street wear" products={streetProducts} />
+        <ProductCatalog title="Streetwear" products={products} />
       </main>
-      <FullFooter onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
+      <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>
   )
 }

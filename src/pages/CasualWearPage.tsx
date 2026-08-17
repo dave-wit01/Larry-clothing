@@ -3,7 +3,7 @@ import { Header } from '../components/Header'
 import { MenuDrawer } from '../components/MenuDrawer'
 import { ServicesDrawer } from '../components/ServicesDrawer'
 import { ProductCatalog } from '../components/ProductCatalog'
-import { casualProducts } from '../data/catalogProducts'
+import { usePublishedProducts } from '../hooks/usePublishedProducts'
 import FullFooter from './Footer.jsx'
 
 type CartProduct = {
@@ -44,6 +44,7 @@ export function CasualWearPage({
 }: CasualWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const { products } = usePublishedProducts('Casual wear')
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 8)
@@ -104,7 +105,7 @@ export function CasualWearPage({
         onOpenMenu={() => setIsMenuOpen(true)}
       />
       <main>
-        <ProductCatalog title="Casual wear" products={casualProducts} />
+        <ProductCatalog title="Casual wear" products={products} />
       </main>
       <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>

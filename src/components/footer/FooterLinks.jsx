@@ -1,10 +1,38 @@
-export default function FooterLinks({ onNavigateAbout, onNavigateHelp, onOpenServices, onOpenRegister }) {
+export default function FooterLinks({
+  onNavigateAbout,
+  onNavigateHelp,
+  onOpenServices,
+  onOpenRegister,
+  showEmailSignup = true,
+}) {
   const footerLinks = [
-    { label: 'Help', action: () => { if (onNavigateHelp) onNavigateHelp() } },
-    { label: 'Services', action: () => { if (onOpenServices) onOpenServices() } },
-    { label: 'About COSLARRY', action: () => { console.log('About clicked, onNavigateAbout is:', onNavigateAbout); if (onNavigateAbout) onNavigateAbout(); } },
-    { label: 'Email Sign-up', action: () => { if (onOpenRegister) onOpenRegister() } },
-  ]
+    {
+      label: 'Help',
+      action: () => {
+        if (onNavigateHelp) onNavigateHelp();
+      },
+    },
+    {
+      label: 'Services',
+      action: () => {
+        if (onOpenServices) onOpenServices();
+      },
+    },
+    {
+      label: 'About us',
+      action: () => {
+        if (onNavigateAbout) onNavigateAbout();
+      },
+    },
+    ...(showEmailSignup
+      ? [{
+          label: 'Email Sign-up',
+          action: () => {
+            if (onOpenRegister) onOpenRegister();
+          },
+        }]
+      : []),
+  ];
 
   return (
     <nav className="w-full max-w-3xl mx-auto" aria-label="Footer navigation">

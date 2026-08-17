@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { buildWhatsAppOrderLink } from '../lib/whatsapp'
 import { useCart } from '../context/CartContext'
+import { formatPrice } from '../lib/currency'
 
-type CheckoutItem = { id: string; name: string; price: number; image: string; quantity: number; size?: number }
+type CheckoutItem = { id: string; name: string; price: number; image: string; quantity: number; size?: string }
 
 type CheckoutPageProps = { items?: CheckoutItem[]; onGoHome?: () => void }
 
@@ -44,11 +45,11 @@ export function CheckoutPage({ items = [], onGoHome }: CheckoutPageProps) {
           {items.map((item) => (
             <div key={item.id} className="mb-4 flex gap-4 last:mb-0">
               <img src={item.image} alt={item.name} className="h-20 w-16 rounded-lg object-cover" />
-              <div><p className="font-medium">{item.name}</p><p className="text-sm text-ink/70">Quantity: {item.quantity} · Size: {item.size ?? 'Not selected'}</p><p className="mt-1 font-semibold">${(item.price * item.quantity).toFixed(2)}</p></div>
+              <div><p className="font-medium">{item.name}</p><p className="text-sm text-ink/70">Quantity: {item.quantity} · Size: {item.size ?? 'Not selected'}</p><p className="mt-1 font-semibold">{formatPrice(item.price * item.quantity)}</p></div>
             </div>
           ))}
           <div className="my-5 border-t border-line" />
-          <div className="flex justify-between font-semibold"><span>Total</span><span>${total.toFixed(2)}</span></div>
+          <div className="flex justify-between font-semibold"><span>Total</span><span>{formatPrice(total)}</span></div>
         </div>
 
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
