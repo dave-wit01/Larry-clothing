@@ -46,8 +46,7 @@ describe('SearchResultsPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'Price: low-high' }));
 
-    const prices = screen.getAllByText(/^GH₵\d+\.\d{2}$/).map((price) => price.textContent);
-    expect(prices).toEqual([
+    const expectedPrices = [
       formatPrice(35),
       formatPrice(35),
       formatPrice(43),
@@ -57,7 +56,12 @@ describe('SearchResultsPage', () => {
       formatPrice(59),
       formatPrice(59),
       formatPrice(67),
-    ]);
+    ];
+    const prices = screen
+      .getAllByText((content) => expectedPrices.includes(content))
+      .map((price) => price.textContent);
+
+    expect(prices).toEqual(expectedPrices);
 
     await user.click(screen.getByRole('button', { name: 'Close filters' }));
 

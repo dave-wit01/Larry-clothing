@@ -3,20 +3,47 @@ import FooterBrand from '../components/footer/FooterBrand';
 import FooterHistory from '../components/footer/FooterHistory';
 import FooterLinks from '../components/footer/FooterLinks';
 import FooterMeta from '../components/footer/FooterMeta';
-import { supabase } from '../lib/supabase';
 
-export default function Footer({ onNavigateAbout, onNavigateHelp, onOpenServices, onOpenRegister }) {
+export default function Footer({
+  onNavigateAbout,
+  onNavigateHelp,
+  onOpenServices,
+  onOpenRegister,
+}) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    if (!supabase) return undefined;
+    let isCurrent = true;
+    let unsubscribe;
+    let idleCallback;
+    let timeout;
 
-    supabase.auth.getSession().then(({ data }) => setIsLoggedIn(Boolean(data.session)));
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsLoggedIn(Boolean(session));
-    });
+    const checkSession = () => {
+      void import('../lib/supabase').then(({ supabase }) => {
+        if (!supabase || !isCurrent) return;
 
-    return () => listener.subscription.unsubscribe();
+        supabase.auth.getSession().then(({ data }) => {
+          if (isCurrent) setIsLoggedIn(Boolean(data.session));
+        });
+        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+          if (isCurrent) setIsLoggedIn(Boolean(session));
+        });
+        unsubscribe = () => listener.subscription.unsubscribe();
+      });
+    };
+
+    if ('requestIdleCallback' in window) {
+      idleCallback = window.requestIdleCallback(checkSession, { timeout: 2000 });
+    } else {
+      timeout = window.setTimeout(checkSession, 1200);
+    }
+
+    return () => {
+      isCurrent = false;
+      if (idleCallback) window.cancelIdleCallback(idleCallback);
+      if (timeout) window.clearTimeout(timeout);
+      unsubscribe?.();
+    };
   }, []);
 
   return (

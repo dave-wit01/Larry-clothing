@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SEARCH_PRODUCTS, type SearchProduct } from '../data/searchData';
 import { supabase } from '../lib/supabase';
 
@@ -41,14 +41,20 @@ function toProduct(row: ProductRow): SearchProduct {
 export function usePublishedProducts(categories?: string | string[]) {
   const categoryValues = categories ? (Array.isArray(categories) ? categories : [categories]) : [];
   const categoryKey = categoryValues.join('|');
-  const fallbackProducts = categoryValues.length
-    ? SEARCH_PRODUCTS.filter((product) => categoryValues.includes(product.category))
-    : SEARCH_PRODUCTS;
+  const fallbackProducts = useMemo(() => {
+    const values = categoryKey ? categoryKey.split('|') : [];
+
+    return values.length
+      ? SEARCH_PRODUCTS.filter((product) => values.includes(product.category))
+      : SEARCH_PRODUCTS;
+  }, [categoryKey]);
   const [products, setProducts] = useState<SearchProduct[]>(fallbackProducts);
   const [isLoading, setIsLoading] = useState(Boolean(supabase));
 
   useEffect(() => {
     const client = supabase;
+    const values = categoryKey ? categoryKey.split('|') : [];
+
     if (!client) {
       setProducts(fallbackProducts);
       setIsLoading(false);
@@ -64,8 +70,8 @@ export function usePublishedProducts(categories?: string | string[]) {
         .eq('status', 'published')
         .order('created_at', { ascending: false });
 
-      if (categoryValues.length === 1) query = query.eq('category', categoryValues[0]);
-      if (categoryValues.length > 1) query = query.in('category', categoryValues);
+      if (values.length === 1) query = query.eq('category', values[0]);
+      if (values.length > 1) query = query.in('category', values);
 
       const { data, error } = await query;
       if (!isCurrent) return;
@@ -79,7 +85,7 @@ export function usePublishedProducts(categories?: string | string[]) {
     return () => {
       isCurrent = false;
     };
-  }, [categoryKey]);
+  }, [categoryKey, fallbackProducts]);
 
   return { products, isLoading };
 }

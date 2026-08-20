@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CircleCheck, CircleX, X } from 'lucide-react';
 import { menCollections } from '../data/navigation';
-import { useNavigation } from '../context/NavigationContext';
+import { type NavigationTarget, useNavigation } from '../context/NavigationContext';
 
 type ServicesDrawerProps = {
   isOpen: boolean;
@@ -15,12 +15,13 @@ type ServicesDrawerProps = {
 const topItems = ['HOME'];
 const bottomItems = ['CONTACT US', 'ABOUT US', 'SERVICES'] as const;
 
-const menTargets = {
+const menTargets: Record<string, NavigationTarget> = {
   'Casual wear': 'casual',
   Streetwear: 'street',
+  'Street wear': 'street',
   Jersey: 'jersey',
   'About CosLaary': 'about',
-} as const;
+};
 
 export function ServicesDrawer({
   isOpen,
@@ -79,9 +80,11 @@ export function ServicesDrawer({
     onClose();
   };
 
-  const handleMenNavigation = (link: keyof typeof menTargets) => {
-    if (navigate) {
-      navigate(menTargets[link]);
+  const handleMenNavigation = (link: string) => {
+    const target = menTargets[link];
+
+    if (navigate && target) {
+      navigate(target);
     } else if (link === 'Casual wear') {
       onNavigateCasual?.();
     }
@@ -158,7 +161,7 @@ export function ServicesDrawer({
                       <button
                         type="button"
                         className="flex w-full items-center gap-2 px-10 py-3 text-left text-sm font-medium transition-colors hover:bg-ink/5"
-                        onClick={() => handleMenNavigation(item.label as keyof typeof menTargets)}
+                        onClick={() => handleMenNavigation(item.navigationLabel ?? item.label)}
                       >
                         <CircleCheck
                           className="text-emerald"

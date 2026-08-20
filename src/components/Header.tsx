@@ -1,131 +1,140 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowLeft, Menu, Search, ShoppingBag, User, X } from 'lucide-react'
-import { AccountMenu } from './AccountMenu'
-import { BrandLogo } from './BrandLogo'
-import { getSearchSuggestions } from '../data/searchData'
-import { useSearch } from '../context/SearchContext'
-import { useCart } from '../context/CartContext'
-import { useBackNavigation } from '../context/NavigationContext'
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { ArrowLeft, Menu, Search, ShoppingBag, User, X } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
+import { getSearchSuggestions } from '../data/searchData';
+import { useSearch } from '../context/SearchContext';
+import { useCart } from '../context/CartContext';
+import { useBackNavigation } from '../context/NavigationContext';
+
+const AccountMenu = lazy(() =>
+  import('./AccountMenu').then((module) => ({ default: module.AccountMenu }))
+);
 
 type HeaderProps = {
-  isScrolled: boolean
-  onMenuOpen: () => void
-  onOpenLogin?: () => void
-  onOpenRegister?: () => void
-  onGoHome?: () => void
-}
+  isScrolled: boolean;
+  onMenuOpen: () => void;
+  onOpenLogin?: () => void;
+  onOpenRegister?: () => void;
+  onGoHome?: () => void;
+};
 
-export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister, onGoHome }: HeaderProps) {
-  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [recentSearches, setRecentSearches] = useState<string[]>([])
-  const [debouncedQuery, setDebouncedQuery] = useState('')
-  const inputRef = useRef<HTMLInputElement | null>(null)
-  const searchContainerRef = useRef<HTMLDivElement | null>(null)
-  const searchContext = useSearch()
-  const { items, openCart } = useCart()
-  const cartItemCount = items.reduce((total, item) => total + item.quantity, 0)
-  const goBack = useBackNavigation()
+export function Header({
+  isScrolled,
+  onMenuOpen,
+  onOpenLogin,
+  onOpenRegister,
+  onGoHome,
+}: HeaderProps) {
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const searchContainerRef = useRef<HTMLDivElement | null>(null);
+  const searchContext = useSearch();
+  const { items, openCart } = useCart();
+  const cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
+  const goBack = useBackNavigation();
 
   const suggestions = useMemo(
     () => (debouncedQuery.length >= 2 ? getSearchSuggestions(debouncedQuery) : []),
     [debouncedQuery]
-  )
+  );
 
-  const recentDisplay = recentSearches.slice(0, 5)
+  const recentDisplay = recentSearches.slice(0, 5);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem('clothingSearchHistory')
+    const saved = window.localStorage.getItem('clothingSearchHistory');
     if (saved) {
       try {
-        setRecentSearches(JSON.parse(saved))
+        setRecentSearches(JSON.parse(saved));
       } catch {
-        setRecentSearches([])
+        setRecentSearches([]);
       }
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      setDebouncedQuery(searchQuery.trim())
-    }, 300)
+      setDebouncedQuery(searchQuery.trim());
+    }, 300);
 
-    return () => window.clearTimeout(timer)
-  }, [searchQuery])
+    return () => window.clearTimeout(timer);
+  }, [searchQuery]);
 
   useEffect(() => {
-    if (!isSearchOpen) return undefined
+    if (!isSearchOpen) return undefined;
 
     const handleDocumentClick = (event: MouseEvent) => {
       if (!searchContainerRef.current?.contains(event.target as Node)) {
-        setIsSearchOpen(false)
+        setIsSearchOpen(false);
       }
-    }
+    };
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsSearchOpen(false)
+        setIsSearchOpen(false);
       }
-    }
+    };
 
-    document.addEventListener('mousedown', handleDocumentClick)
-    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('mousedown', handleDocumentClick);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.removeEventListener('mousedown', handleDocumentClick)
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isSearchOpen])
+      document.removeEventListener('mousedown', handleDocumentClick);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isSearchOpen]);
 
   useEffect(() => {
-    if (!isAccountMenuOpen) return undefined
+    if (!isAccountMenuOpen) return undefined;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsAccountMenuOpen(false)
-    }
+      if (event.key === 'Escape') setIsAccountMenuOpen(false);
+    };
 
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isAccountMenuOpen])
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isAccountMenuOpen]);
 
   const saveSearch = (query: string) => {
-    if (!query.trim()) return
+    if (!query.trim()) return;
 
-    const nextHistory = [query, ...recentSearches.filter((item) => item !== query)].slice(0, 5)
-    setRecentSearches(nextHistory)
-    window.localStorage.setItem('clothingSearchHistory', JSON.stringify(nextHistory))
-  }
+    const nextHistory = [query, ...recentSearches.filter((item) => item !== query)].slice(0, 5);
+    setRecentSearches(nextHistory);
+    window.localStorage.setItem('clothingSearchHistory', JSON.stringify(nextHistory));
+  };
 
   const handleSubmitSearch = (query = searchQuery) => {
-    const trimmed = query.trim()
-    if (!trimmed) return
+    const trimmed = query.trim();
+    if (!trimmed) return;
 
-    saveSearch(trimmed)
-    setIsSearchOpen(false)
-    searchContext?.submitSearch(trimmed)
-  }
+    saveSearch(trimmed);
+    setIsSearchOpen(false);
+    searchContext?.submitSearch(trimmed);
+  };
 
   const openSearch = () => {
-    setIsSearchOpen(true)
-    window.requestAnimationFrame(() => inputRef.current?.focus())
-  }
+    setIsSearchOpen(true);
+    window.requestAnimationFrame(() => inputRef.current?.focus());
+  };
 
   const handleSearchSelect = (item: string) => {
-    setSearchQuery(item)
-    handleSubmitSearch(item)
-    inputRef.current?.blur()
-  }
+    setSearchQuery(item);
+    handleSubmitSearch(item);
+    inputRef.current?.blur();
+  };
 
   const handleClearSearch = () => {
-    setSearchQuery('')
-    setDebouncedQuery('')
-    setIsSearchOpen(true)
-    window.requestAnimationFrame(() => inputRef.current?.focus())
-  }
+    setSearchQuery('');
+    setDebouncedQuery('');
+    setIsSearchOpen(true);
+    window.requestAnimationFrame(() => inputRef.current?.focus());
+  };
 
-  const showRecentHistory = isSearchOpen && searchQuery.trim().length === 0
-  const showSuggestions = isSearchOpen && searchQuery.trim().length >= 2
+  const showRecentHistory = isSearchOpen && searchQuery.trim().length === 0;
+  const showSuggestions = isSearchOpen && searchQuery.trim().length >= 2;
 
   return (
     <header
@@ -144,12 +153,7 @@ export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister, on
           >
             <ArrowLeft size={18} strokeWidth={1.5} />
           </button>
-          <button
-            className="icon-button"
-            type="button"
-            aria-label="Open menu"
-            onClick={onMenuOpen}
-          >
+          <button className="icon-button" type="button" aria-label="Open menu" onClick={onMenuOpen}>
             <Menu size={18} strokeWidth={1.5} />
           </button>
         </div>
@@ -159,18 +163,27 @@ export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister, on
           href="#top"
           aria-label="Larry Clothing home"
           onClick={(event) => {
-            event.preventDefault()
-            onGoHome?.()
-            window.scrollTo({ top: 0, behavior: 'smooth' })
+            event.preventDefault();
+            onGoHome?.();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         >
           <BrandLogo className="h-full w-full" />
         </a>
 
         <div className="flex items-center gap-1">
-          <button className="icon-button relative border-transparent hover:border-transparent" type="button" aria-label={`Open cart, ${cartItemCount} items`} onClick={openCart}>
+          <button
+            className="icon-button relative border-transparent hover:border-transparent"
+            type="button"
+            aria-label={`Open cart, ${cartItemCount} items`}
+            onClick={openCart}
+          >
             <ShoppingBag size={20} strokeWidth={1.5} />
-            {cartItemCount > 0 && <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald px-1 text-[10px] text-paper">{cartItemCount}</span>}
+            {cartItemCount > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald px-1 text-[10px] text-paper">
+                {cartItemCount}
+              </span>
+            )}
           </button>
           <button
             className="icon-button border-transparent hover:border-transparent"
@@ -199,8 +212,8 @@ export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister, on
               onFocus={() => setIsSearchOpen(true)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter') {
-                  event.preventDefault()
-                  handleSubmitSearch()
+                  event.preventDefault();
+                  handleSubmitSearch();
                 }
               }}
             />
@@ -222,9 +235,9 @@ export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister, on
             aria-label={searchQuery.trim() ? 'Search' : 'Open search'}
             onClick={() => {
               if (searchQuery.trim().length > 0) {
-                handleSubmitSearch()
+                handleSubmitSearch();
               } else {
-                openSearch()
+                openSearch();
               }
             }}
           >
@@ -236,7 +249,9 @@ export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister, on
               <div className="max-h-72 overflow-y-auto px-4 py-3">
                 {showRecentHistory ? (
                   <div className="space-y-3">
-                    <p className="text-xs uppercase tracking-[0.25em] text-ink/60">Recent searches</p>
+                    <p className="text-xs uppercase tracking-[0.25em] text-ink/60">
+                      Recent searches
+                    </p>
                     {recentDisplay.length > 0 ? (
                       recentDisplay.map((item) => (
                         <button
@@ -276,7 +291,13 @@ export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister, on
                         )}
                         <div className="flex-1">
                           <p className="font-medium text-sm text-ink">{item.label}</p>
-                          <p className="text-xs text-ink/60">{item.type === 'product' ? 'Product' : item.type === 'category' ? 'Category' : 'Top search'}</p>
+                          <p className="text-xs text-ink/60">
+                            {item.type === 'product'
+                              ? 'Product'
+                              : item.type === 'category'
+                                ? 'Category'
+                                : 'Top search'}
+                          </p>
                         </div>
                       </button>
                     ))
@@ -304,12 +325,16 @@ export function Header({ isScrolled, onMenuOpen, onOpenLogin, onOpenRegister, on
           onClick={() => setIsAccountMenuOpen(false)}
         />
       )}
-      <AccountMenu
-        isOpen={isAccountMenuOpen}
-        onClose={() => setIsAccountMenuOpen(false)}
-        onOpenLogin={onOpenLogin}
-        onOpenRegister={onOpenRegister}
-      />
+      {isAccountMenuOpen && (
+        <Suspense fallback={null}>
+          <AccountMenu
+            isOpen={isAccountMenuOpen}
+            onClose={() => setIsAccountMenuOpen(false)}
+            onOpenLogin={onOpenLogin}
+            onOpenRegister={onOpenRegister}
+          />
+        </Suspense>
+      )}
     </header>
-  )
+  );
 }

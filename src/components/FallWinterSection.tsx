@@ -1,21 +1,21 @@
-import { type ComponentPropsWithoutRef } from 'react'
-import homepageImage from '../assets/Homepage4.jpg'
+import { type ComponentPropsWithoutRef } from 'react';
+import homepageImage from '../assets/Homepage4.jpg';
 
 type FeatureItem = {
-  id: string
-  label: string
-  imageUrl: string
-}
+  id: string;
+  label: string;
+  imageUrl: string;
+};
 
 type FallWinterSectionProps = {
-  eyebrow?: string
-  heading?: string
-  imageSrc?: string
-  features?: FeatureItem[]
-  imageOnly?: boolean
-} & Omit<ComponentPropsWithoutRef<'section'>, 'children'>
+  eyebrow?: string;
+  heading?: string;
+  imageSrc?: string;
+  features?: FeatureItem[];
+  imageOnly?: boolean;
+} & Omit<ComponentPropsWithoutRef<'section'>, 'children'>;
 
-import mensuitImage from '../assets/mensuit0.1.jpg'
+import mensuitImage from '../assets/mensuit0.1.jpg';
 
 const defaultFeatures: FeatureItem[] = [
   {
@@ -28,7 +28,7 @@ const defaultFeatures: FeatureItem[] = [
     label: "Men's Suit",
     imageUrl: 'https://picsum.photos/id/1074/700/1000',
   },
-]
+];
 
 export function FallWinterSection({
   eyebrow = 'Men',
@@ -50,7 +50,8 @@ export function FallWinterSection({
             className="h-full w-full object-cover"
             src={imageSrc}
             alt={`${eyebrow} ${heading} collection`}
-            fetchPriority="high"
+            loading={imageOnly ? 'lazy' : 'eager'}
+            fetchPriority={imageOnly ? 'low' : 'high'}
             decoding="async"
           />
         </div>
@@ -58,7 +59,9 @@ export function FallWinterSection({
         {!imageOnly && (
           <>
             <div className="mx-auto max-w-6xl px-5 pt-10 text-center sm:px-8 sm:pt-14 lg:px-10">
-              <p className="text-xs font-medium uppercase tracking-[0.25em] text-ink/70">{eyebrow}</p>
+              <p className="text-xs font-medium uppercase tracking-[0.25em] text-ink/70">
+                {eyebrow}
+              </p>
               <h2 className="font-display mt-2 text-3xl font-medium text-ink sm:text-4xl lg:text-5xl">
                 {heading}
               </h2>
@@ -84,5 +87,5 @@ export function FallWinterSection({
         )}
       </div>
     </section>
-  )
+  );
 }
