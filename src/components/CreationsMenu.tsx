@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Minus, Plus } from 'lucide-react';
 import { menCollections } from '../data/navigation';
 
@@ -14,6 +15,7 @@ export function CreationsMenu({ isOpen, onClose, onNavigate }: CreationsMenuProp
   useEffect(() => {
     if (!isOpen) return undefined;
 
+    setIsMenOpen(true);
     const originalOverflow = document.body.style.overflow;
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose();
@@ -30,7 +32,7 @@ export function CreationsMenu({ isOpen, onClose, onNavigate }: CreationsMenuProp
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex"
       role="dialog"
@@ -51,17 +53,19 @@ export function CreationsMenu({ isOpen, onClose, onNavigate }: CreationsMenuProp
         {isMenOpen && (
           <nav id="creations-men-collection" aria-label="Men collections">
             <ul className="py-2">
-              {menCollections.filter((collection) => collection.status === 'available').map((collection) => (
-                <li key={collection.label}>
-                  <button
-                    type="button"
-                    className="block w-full px-10 py-3 text-left text-sm font-medium transition-colors hover:bg-ink/5"
-                    onClick={() => onNavigate(collection.navigationLabel ?? collection.label)}
-                  >
-                    {collection.label}
-                  </button>
-                </li>
-              ))}
+              {menCollections
+                .filter((collection) => collection.status === 'available')
+                .map((collection) => (
+                  <li key={collection.label}>
+                    <button
+                      type="button"
+                      className="block w-full px-10 py-3 text-left text-sm font-medium transition-colors hover:bg-ink/5"
+                      onClick={() => onNavigate(collection.navigationLabel ?? collection.label)}
+                    >
+                      {collection.label}
+                    </button>
+                  </li>
+                ))}
             </ul>
           </nav>
         )}
@@ -72,6 +76,7 @@ export function CreationsMenu({ isOpen, onClose, onNavigate }: CreationsMenuProp
         aria-label="Close men collections"
         onClick={onClose}
       />
-    </div>
+    </div>,
+    document.body
   );
 }

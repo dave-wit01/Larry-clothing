@@ -15,13 +15,14 @@ Run the `20260817_products_and_storage.sql` migration in Supabase before managin
 | `category` | `Jersey` |
 | `price` | `250` (USD) |
 | `image_url` | The public URL copied from Storage |
+| `image_urls` | Optional extra public image URLs, for example `{https://.../front.jpg,https://.../back.jpg}` |
 | `colors` | `{Black}` |
 | `sizes` | `{S,M,L,XL,XXL}` |
 | `status` | `published` |
 | `is_active` | `true` |
 | `is_new` | `true` or `false` |
 
-Products with `status = published` and `is_active = true` appear automatically in the storefront and search. Use `draft` while preparing a product or `coming_soon` to keep it hidden from shoppers.
+Products with `status = published` and `is_active = true` appear automatically in the storefront and search. `image_url` is the main product image; add up to two supporting images in `image_urls` to show selectable thumbnails in the shopping bag. Use `draft` while preparing a product or `coming_soon` to keep it hidden from shoppers.
 
 ## Edit or remove a product
 

@@ -62,6 +62,7 @@ export function ProductDetailPage({
     name: product.name,
     price: product.price,
     image: product.image,
+    images: product.images,
   };
   const isInBag = hasItem(cartProduct);
 
@@ -97,9 +98,9 @@ export function ProductDetailPage({
         onOpenMenu={() => setIsMenuOpen(true)}
       />
 
-      <main className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:px-10">
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-14">
-          <div className="overflow-hidden rounded-2xl bg-parchment">
+      <main className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <div className="overflow-hidden rounded-2xl bg-parchment shadow-sm">
             <img
               src={product.image}
               alt={product.name}
@@ -108,9 +109,13 @@ export function ProductDetailPage({
           </div>
           <div className="flex flex-col justify-center py-2 lg:py-8">
             <p className="text-xs uppercase tracking-[0.25em] text-ink/60">{product.category}</p>
-            <h1 className="mt-3 font-display text-3xl font-medium sm:text-4xl">{product.name}</h1>
-            <p className="mt-4 text-2xl font-semibold">{formatPrice(product.price)}</p>
-            <p className="mt-5 max-w-md text-sm leading-6 text-ink/70">
+            <h1 className="mt-3 font-display text-3xl font-medium leading-tight sm:text-4xl lg:text-5xl">
+              {product.name}
+            </h1>
+            <p className="mt-5 text-2xl font-semibold tracking-[-0.025em]">
+              {formatPrice(product.price)}
+            </p>
+            <p className="mt-5 max-w-md text-sm leading-6 text-ink/70 sm:text-base">
               A considered CosLaary piece, selected for its material, shape, and everyday
               wearability.
             </p>
@@ -126,7 +131,7 @@ export function ProductDetailPage({
                     type="button"
                     aria-pressed={selectedColor === color}
                     onClick={() => setSelectedColor(color)}
-                    className={`rounded-full border px-4 py-2 text-sm transition ${selectedColor === color ? 'border-emerald bg-emerald/5 text-emerald' : 'border-ink/10 bg-white hover:border-ink/30'}`}
+                    className={`min-h-10 rounded-full border px-4 text-sm transition ${selectedColor === color ? 'border-emerald bg-emerald/5 text-emerald' : 'border-ink/10 bg-white hover:border-ink/30'}`}
                   >
                     {color}
                   </button>
@@ -145,7 +150,7 @@ export function ProductDetailPage({
                     type="button"
                     aria-pressed={selectedSize === size}
                     onClick={() => setSelectedSize(size)}
-                    className={`min-w-12 rounded-full border px-4 py-2 text-sm transition ${selectedSize === size ? 'border-emerald bg-emerald/5 text-emerald' : 'border-ink/10 bg-white hover:border-ink/30'}`}
+                    className={`min-h-10 min-w-12 rounded-full border px-4 text-sm transition ${selectedSize === size ? 'border-emerald bg-emerald/5 text-emerald' : 'border-ink/10 bg-white hover:border-ink/30'}`}
                   >
                     {size}
                   </button>
@@ -157,7 +162,7 @@ export function ProductDetailPage({
               <button
                 type="button"
                 onClick={() => addItem(cartProduct)}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-ink px-5 text-sm font-medium transition hover:border-emerald hover:text-emerald"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-ink px-5 text-sm font-semibold uppercase tracking-[0.1em] transition hover:border-emerald hover:text-emerald"
               >
                 <ShoppingBag size={18} strokeWidth={1.5} />
                 {isInBag ? 'ADD ANOTHER TO BAG' : 'ADD TO BAG'}
@@ -165,7 +170,7 @@ export function ProductDetailPage({
               <button
                 type="button"
                 onClick={() => buyNow(cartProduct)}
-                className="min-h-12 rounded-full bg-ink px-5 text-sm font-medium text-paper transition hover:bg-emerald"
+                className="min-h-12 rounded-full bg-ink px-5 text-sm font-semibold uppercase tracking-[0.1em] text-paper transition hover:bg-emerald"
               >
                 BUY NOW
               </button>

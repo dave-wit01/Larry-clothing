@@ -2,6 +2,7 @@
 alter table public.products
   add column if not exists category text not null default 'Casual wear',
   add column if not exists image_url text,
+  add column if not exists image_urls text[] not null default '{}',
   add column if not exists colors text[] not null default array['Black'],
   add column if not exists status text not null default 'published',
   add column if not exists is_new boolean not null default false;

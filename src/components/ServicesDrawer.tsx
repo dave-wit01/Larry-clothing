@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { CircleCheck, CircleX, X } from 'lucide-react';
 import { menCollections } from '../data/navigation';
 import { useNavigation } from '../context/NavigationContext';
@@ -29,7 +30,18 @@ export function ServicesDrawer({
 }: ServicesDrawerProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [isMenOpen, setIsMenOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(isOpen);
   const navigate = useNavigation();
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsMounted(true);
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => setIsMounted(false), 240);
+    return () => window.clearTimeout(timer);
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -49,7 +61,7 @@ export function ServicesDrawer({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isMounted) return null;
 
   const handleItemClick = (item: string) => {
     if (item === 'HOME' && onNavigateHome) {
@@ -76,20 +88,23 @@ export function ServicesDrawer({
     onClose();
   };
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex justify-end"
       role="dialog"
-      aria-modal="true"
+      aria-modal={isOpen}
+      aria-hidden={!isOpen}
       aria-label="Services menu"
     >
       <button
         type="button"
         aria-label="Close services menu"
-        className="flex-1 bg-black/30"
+        className={`flex-1 bg-black/30 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
         onClick={onClose}
       />
-      <div className="flex h-full w-full max-w-sm flex-col bg-white text-ink shadow-xl sm:max-w-md">
+      <div
+        className={`flex h-full w-full max-w-sm flex-col bg-white text-ink shadow-xl transition-transform duration-300 ease-out sm:max-w-md ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+      >
         <div className="flex justify-end px-4 pt-4">
           <button
             ref={closeButtonRef}
@@ -133,26 +148,47 @@ export function ServicesDrawer({
                 id="services-men-collection"
                 className="border-t border-ink/10 bg-ink/[0.03] py-2"
               >
-                <li className="px-10 pb-2 pt-3 text-xs font-medium uppercase tracking-[0.16em] text-emerald">Disseminate</li>
-                {menCollections.filter((item) => item.status === 'available').map((item) => (
-                  <li key={item.label}>
-                    <button
-                      type="button"
-                      className="flex w-full items-center gap-2 px-10 py-3 text-left text-sm font-medium transition-colors hover:bg-ink/5"
-                      onClick={() => handleMenNavigation(item.label as keyof typeof menTargets)}
+                <li className="px-10 pb-2 pt-3 text-xs font-medium uppercase tracking-[0.16em] text-emerald">
+                  Disseminate
+                </li>
+                {menCollections
+                  .filter((item) => item.status === 'available')
+                  .map((item) => (
+                    <li key={item.label}>
+                      <button
+                        type="button"
+                        className="flex w-full items-center gap-2 px-10 py-3 text-left text-sm font-medium transition-colors hover:bg-ink/5"
+                        onClick={() => handleMenNavigation(item.label as keyof typeof menTargets)}
+                      >
+                        <CircleCheck
+                          className="text-emerald"
+                          size={16}
+                          strokeWidth={1.8}
+                          aria-hidden="true"
+                        />
+                        {item.label}
+                      </button>
+                    </li>
+                  ))}
+                <li className="px-10 pb-2 pt-6 text-xs font-medium uppercase tracking-[0.16em] text-red-600">
+                  Impending unpublished
+                </li>
+                {menCollections
+                  .filter((item) => item.status === 'coming-soon')
+                  .map((item) => (
+                    <li
+                      key={item.label}
+                      className="flex items-center gap-2 px-10 py-2 text-sm text-ink/45"
                     >
-                      <CircleCheck className="text-emerald" size={16} strokeWidth={1.8} aria-hidden="true" />
-                      {item.label}
-                    </button>
-                  </li>
-                ))}
-                <li className="px-10 pb-2 pt-6 text-xs font-medium uppercase tracking-[0.16em] text-red-600">Impending unpublished</li>
-                {menCollections.filter((item) => item.status === 'coming-soon').map((item) => (
-                  <li key={item.label} className="flex items-center gap-2 px-10 py-2 text-sm text-ink/45">
-                    <CircleX className="shrink-0 text-red-600" size={16} strokeWidth={1.8} aria-hidden="true" />
-                    <span>{item.label}</span>
-                  </li>
-                ))}
+                      <CircleX
+                        className="shrink-0 text-red-600"
+                        size={16}
+                        strokeWidth={1.8}
+                        aria-hidden="true"
+                      />
+                      <span>{item.label}</span>
+                    </li>
+                  ))}
               </ul>
             )}
           </div>
@@ -174,6 +210,7 @@ export function ServicesDrawer({
           </ul>
         </nav>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

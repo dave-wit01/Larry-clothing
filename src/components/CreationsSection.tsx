@@ -10,11 +10,11 @@ export function CreationsSection({ onOpenCollection }: CreationsSectionProps) {
       <h2 className="mx-auto max-w-2xl text-center font-display text-2xl font-medium leading-snug sm:text-3xl lg:text-4xl">
         Explore a selection of CosLaary Creations
       </h2>
-      <div className="mt-9 grid grid-cols-2 gap-3 sm:mt-12 sm:gap-6 lg:gap-8">
+      <div className="mt-9 grid grid-cols-2 gap-4 sm:mt-12 sm:gap-6 lg:gap-8">
         {creations.map((creation) => (
           <a
             key={creation.id}
-            className="group relative block overflow-hidden rounded-sm bg-parchment"
+            className="group relative block overflow-hidden rounded-2xl bg-parchment shadow-sm transition-shadow duration-300 hover:shadow-md"
             href="#top"
           >
             <div className="aspect-[3/4] overflow-hidden">

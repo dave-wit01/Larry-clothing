@@ -1,5 +1,5 @@
-import { lazy, Suspense, useRef, useState } from 'react';
-import type { ReactElement } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import type { ReactElement, TouchEvent } from 'react';
 import { HomePage } from './pages/HomePage';
 import { SearchProvider } from './context/SearchContext';
 import { NavigationProvider } from './context/NavigationContext';
@@ -93,6 +93,10 @@ function App() {
     new URLSearchParams(window.location.search).has('reset-password') ? 'reset-password' : 'home'
   );
   const viewHistory = useRef<View[]>([]);
+  const pageContainerRef = useRef<HTMLDivElement | null>(null);
+  const swipeStart = useRef<{ x: number; y: number; isEligible: boolean } | null>(null);
+  const [swipeOffset, setSwipeOffset] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
   const setView = (nextView: View) => {
     if (view !== nextView) viewHistory.current.push(view);
     setCurrentView(nextView);
@@ -100,6 +104,13 @@ function App() {
   const goBack = () => {
     const previousView = viewHistory.current.pop();
     if (previousView) setCurrentView(previousView);
+  };
+  const goBackFromSwipe = () => {
+    if (viewHistory.current.length > 0) {
+      goBack();
+      return;
+    }
+    setCurrentView('home');
   };
   const [checkoutItems, setCheckoutItems] = useState<CheckoutItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -115,6 +126,98 @@ function App() {
   const openProduct = (product: SearchProduct) => {
     setSelectedProduct(product);
     setView('product');
+  };
+
+  useEffect(() => {
+    const container = pageContainerRef.current;
+    if (!container || !('IntersectionObserver' in window)) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -8%', threshold: 0.08 }
+    );
+
+    const observeSections = () => {
+      container
+        .querySelectorAll<HTMLElement>('main > *, main section, footer')
+        .forEach((element) => {
+          if (!element.classList.contains('reveal-on-scroll')) {
+            element.classList.add('reveal-on-scroll');
+            observer.observe(element);
+          }
+        });
+    };
+
+    observeSections();
+    const mutationObserver = new MutationObserver(observeSections);
+    mutationObserver.observe(container, { childList: true, subtree: true });
+
+    return () => {
+      mutationObserver.disconnect();
+      observer.disconnect();
+    };
+  }, [view]);
+
+  const isSwipeIgnored = (target: EventTarget | null) => {
+    if (!(target instanceof Element)) return false;
+    return Boolean(
+      target.closest(
+        'button, a, input, textarea, select, [role="dialog"], [data-swipe-back-ignore]'
+      )
+    );
+  };
+
+  const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0];
+    if (!touch) return;
+
+    swipeStart.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      isEligible: view !== 'home' && touch.clientX <= 28 && !isSwipeIgnored(event.target),
+    };
+  };
+
+  const handleTouchMove = (event: TouchEvent<HTMLDivElement>) => {
+    const start = swipeStart.current;
+    const touch = event.touches[0];
+    if (!start?.isEligible || !touch) return;
+
+    const horizontalDistance = touch.clientX - start.x;
+    const verticalDistance = touch.clientY - start.y;
+    if (horizontalDistance <= 0 || Math.abs(verticalDistance) > Math.abs(horizontalDistance)) {
+      swipeStart.current = null;
+      setSwipeOffset(0);
+      setIsSwiping(false);
+      return;
+    }
+
+    setIsSwiping(true);
+    setSwipeOffset(Math.min(horizontalDistance * 0.55, 120));
+  };
+
+  const handleTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    const start = swipeStart.current;
+    const touch = event.changedTouches[0];
+    const horizontalDistance = touch ? touch.clientX - (start?.x ?? touch.clientX) : 0;
+    const verticalDistance = touch ? touch.clientY - (start?.y ?? touch.clientY) : 0;
+    const shouldGoBack = Boolean(
+      start?.isEligible &&
+      horizontalDistance >= 72 &&
+      horizontalDistance > Math.abs(verticalDistance) * 1.25
+    );
+
+    swipeStart.current = null;
+    setIsSwiping(false);
+    setSwipeOffset(0);
+    if (shouldGoBack) goBackFromSwipe();
   };
 
   let content: ReactElement;
@@ -386,9 +489,21 @@ function App() {
     <NavigationProvider navigate={setView} onBack={goBack}>
       <CartProvider onOpenCart={openCart} onBuyNow={openCart}>
         <SearchProvider onSubmitSearch={openSearchResults}>
-          <Suspense fallback={<main className="min-h-screen bg-paper" aria-busy="true" />}>
-            {content}
-          </Suspense>
+          <div
+            ref={pageContainerRef}
+            className={`app-shell${isSwiping ? ' is-swiping' : ''}`}
+            style={{ transform: `translateX(${swipeOffset}px)` }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
+          >
+            <Suspense fallback={<main className="min-h-screen bg-paper" aria-busy="true" />}>
+              <div key={view} className="view-transition">
+                {content}
+              </div>
+            </Suspense>
+          </div>
         </SearchProvider>
       </CartProvider>
     </NavigationProvider>

@@ -1,45 +1,65 @@
-import { useEffect, useRef, useState } from 'react'
-import { CircleCheck, CircleX, Home, Search, User, X } from 'lucide-react'
-import { menCollections } from '../data/navigation'
-import { BrandLogo } from './BrandLogo'
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { CircleCheck, CircleX, Home, Search, User, X } from 'lucide-react';
+import { menCollections } from '../data/navigation';
+import { BrandLogo } from './BrandLogo';
 
 type MenuDrawerProps = {
-  isOpen: boolean
-  isVisible?: boolean
-  onClose: () => void
-  onNavigate?: (link: string) => void
-  onGoHome?: () => void
-}
+  isOpen: boolean;
+  isVisible?: boolean;
+  onClose: () => void;
+  onNavigate?: (link: string) => void;
+  onGoHome?: () => void;
+};
 
-export function MenuDrawer({ isOpen, isVisible = true, onClose, onNavigate, onGoHome }: MenuDrawerProps) {
-  const closeButtonRef = useRef<HTMLButtonElement>(null)
-  const [isMenOpen, setIsMenOpen] = useState(false)
+export function MenuDrawer({
+  isOpen,
+  isVisible = true,
+  onClose,
+  onNavigate,
+  onGoHome,
+}: MenuDrawerProps) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [isMenOpen, setIsMenOpen] = useState(false);
+  const shouldRender = isOpen && isVisible;
+  const [isMounted, setIsMounted] = useState(shouldRender);
 
   useEffect(() => {
-    if (!isOpen || !isVisible) return undefined
-
-    const originalOverflow = document.body.style.overflow
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose()
+    if (shouldRender) {
+      setIsMounted(true);
+      return undefined;
     }
 
-    document.body.style.overflow = 'hidden'
-    document.addEventListener('keydown', handleKeyDown)
-    closeButtonRef.current?.focus()
+    const timer = window.setTimeout(() => setIsMounted(false), 240);
+    return () => window.clearTimeout(timer);
+  }, [shouldRender]);
+
+  useEffect(() => {
+    if (!shouldRender) return undefined;
+
+    const originalOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleKeyDown);
+    closeButtonRef.current?.focus();
 
     return () => {
-      document.body.style.overflow = originalOverflow
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isOpen, isVisible, onClose])
+      document.body.style.overflow = originalOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose, shouldRender]);
 
-  if (!isOpen || !isVisible) return null
+  if (!isMounted) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-paper"
+      className={`fixed inset-0 z-50 overflow-y-auto bg-paper transition-all duration-300 ease-out ${shouldRender ? 'translate-x-0 opacity-100' : '-translate-x-6 opacity-0 pointer-events-none'}`}
       role="dialog"
-      aria-modal="true"
+      aria-modal={shouldRender}
+      aria-hidden={!shouldRender}
       aria-label="Main navigation"
     >
       <header className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center px-5 py-4 sm:px-8 lg:px-10">
@@ -63,8 +83,8 @@ export function MenuDrawer({ isOpen, isVisible = true, onClose, onNavigate, onGo
             type="button"
             aria-label="Go to home page"
             onClick={() => {
-              if (onGoHome) onGoHome()
-              onClose()
+              if (onGoHome) onGoHome();
+              onClose();
             }}
           >
             <Home size={19} strokeWidth={1.5} />
@@ -76,9 +96,9 @@ export function MenuDrawer({ isOpen, isVisible = true, onClose, onNavigate, onGo
           href="#top"
           aria-label="Larry Clothing home"
           onClick={(event) => {
-            event.preventDefault()
-            onGoHome?.()
-            onClose()
+            event.preventDefault();
+            onGoHome?.();
+            onClose();
           }}
         >
           <BrandLogo className="h-full w-full" />
@@ -102,42 +122,67 @@ export function MenuDrawer({ isOpen, isVisible = true, onClose, onNavigate, onGo
             aria-controls="men-collection"
             onClick={() => setIsMenOpen((open) => !open)}
           >
-            Men <span className="ml-2 text-sm" aria-hidden="true">{isMenOpen ? '−' : '+'}</span>
+            Men{' '}
+            <span className="ml-2 text-sm" aria-hidden="true">
+              {isMenOpen ? '−' : '+'}
+            </span>
           </button>
 
           {isMenOpen && (
             <nav id="men-collection" className="mt-14 sm:mt-16" aria-label="Men collection">
-              <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-emerald">Disseminate</p>
+              <p className="mb-5 text-xs font-medium uppercase tracking-[0.2em] text-emerald">
+                Disseminate
+              </p>
               <ul className="space-y-6 sm:space-y-7">
-                {menCollections.filter((item) => item.status === 'available').map((item) => (
-                  <li key={item.label}>
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-3 border-b-2 border-transparent pb-1 text-left text-lg leading-none transition-all duration-150 hover:border-emerald hover:text-emerald active:scale-[0.97] active:text-emerald active:border-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald sm:text-xl"
-                      onClick={() => {
-                        onNavigate?.(item.navigationLabel ?? item.label)
-                        onClose()
-                      }}
-                    >
-                      <CircleCheck className="text-emerald" size={20} strokeWidth={1.8} aria-hidden="true" />
-                      {item.label}
-                    </button>
-                  </li>
-                ))}
+                {menCollections
+                  .filter((item) => item.status === 'available')
+                  .map((item) => (
+                    <li key={item.label}>
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-3 border-b-2 border-transparent pb-1 text-left text-lg leading-none transition-all duration-150 hover:border-emerald hover:text-emerald active:scale-[0.97] active:text-emerald active:border-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald sm:text-xl"
+                        onClick={() => {
+                          onNavigate?.(item.navigationLabel ?? item.label);
+                          onClose();
+                        }}
+                      >
+                        <CircleCheck
+                          className="text-emerald"
+                          size={20}
+                          strokeWidth={1.8}
+                          aria-hidden="true"
+                        />
+                        {item.label}
+                      </button>
+                    </li>
+                  ))}
               </ul>
-              <p className="mb-5 mt-12 text-xs font-medium uppercase tracking-[0.2em] text-red-600">Impending unpublished</p>
+              <p className="mb-5 mt-12 text-xs font-medium uppercase tracking-[0.2em] text-red-600">
+                Impending unpublished
+              </p>
               <ul className="space-y-5 sm:space-y-6">
-                {menCollections.filter((item) => item.status === 'coming-soon').map((item) => (
-                  <li key={item.label} className="inline-flex items-center gap-3 text-lg leading-none text-ink/45 sm:text-xl">
-                    <CircleX className="shrink-0 text-red-600" size={20} strokeWidth={1.8} aria-hidden="true" />
-                    <span>{item.label}</span>
-                    <span className="text-xs uppercase tracking-wider text-red-600">Coming soon</span>
-                  </li>
-                ))}
+                {menCollections
+                  .filter((item) => item.status === 'coming-soon')
+                  .map((item) => (
+                    <li
+                      key={item.label}
+                      className="inline-flex items-center gap-3 text-lg leading-none text-ink/45 sm:text-xl"
+                    >
+                      <CircleX
+                        className="shrink-0 text-red-600"
+                        size={20}
+                        strokeWidth={1.8}
+                        aria-hidden="true"
+                      />
+                      <span>{item.label}</span>
+                      <span className="text-xs uppercase tracking-wider text-red-600">
+                        Coming soon
+                      </span>
+                    </li>
+                  ))}
               </ul>
             </nav>
           )}
-
         </div>
         <a
           className="mt-auto self-center border-b border-ink/70 text-sm text-ink/70 transition-all duration-150 hover:border-ink hover:text-ink active:scale-95 active:text-emerald active:border-emerald focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald"
@@ -147,6 +192,7 @@ export function MenuDrawer({ isOpen, isVisible = true, onClose, onNavigate, onGo
           Can we help you ?
         </a>
       </main>
-    </div>
-  )
+    </div>,
+    document.body
+  );
 }
