@@ -37,7 +37,7 @@ const defaultCategories: StreetCategoryItem[] = [
 export function StreetWearSection({
   heading = 'Street wear',
   productName = 'Le Speedy',
-  description = "Marking the return of the lvxtm collection, the 130th annivesary of the monogram origine.Vnm, time trunk,and monogram embleme. Blending creative spirit with timeless elegance, each collection reflects a distinct facet of CosLarry",
+  description = "Marking the return of the lvxtm collection, the 130th annivesary of the monogram origine.Vnm, time trunk,and monogram embleme. Blending creative spirit with timeless elegance, each collection reflects a distinct facet of CosLaary",
   categories = defaultCategories,
   onSelectItem,
   ...sectionProps

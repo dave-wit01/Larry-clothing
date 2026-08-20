@@ -19,6 +19,7 @@ type StreetWearPageProps = {
   onNavigateAbout?: () => void
   onNavigateHelp?: () => void
   onOpenCart?: (product: { name: string; price: number; image: string }) => void
+  collectionName?: 'Streetwear' | 'Jersey'
 }
 
 export function StreetWearPage({
@@ -33,10 +34,11 @@ export function StreetWearPage({
   onNavigateSocks,
   onNavigateAbout,
   onNavigateHelp,
+  collectionName = 'Streetwear',
 }: StreetWearPageProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const { products } = usePublishedProducts(['Streetwear', 'Jersey'])
+  const { products } = usePublishedProducts(collectionName)
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 8)
@@ -94,7 +96,7 @@ export function StreetWearPage({
         onOpenMenu={() => setIsMenuOpen(true)}
       />
       <main>
-        <ProductCatalog title="Streetwear" products={products} />
+        <ProductCatalog title={collectionName} products={products} />
       </main>
       <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
     </div>

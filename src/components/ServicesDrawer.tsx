@@ -12,12 +12,12 @@ type ServicesDrawerProps = {
 };
 
 const topItems = ['HOME'];
-const bottomItems = ['CONTACT US', ''];
+const bottomItems = ['CONTACT US', 'ABOUT US', 'SERVICES'] as const;
 
 const menTargets = {
   'Casual wear': 'casual',
   Streetwear: 'street',
-  Jersey: 'street',
+  Jersey: 'jersey',
   'About CosLaary': 'about',
 } as const;
 
@@ -58,10 +58,10 @@ export function ServicesDrawer({
     if (item === 'CASUAL WEAR' && onNavigateCasual) {
       onNavigateCasual();
     }
-    if (item === 'ABOUT COSLAARY' && navigate) {
+    if (item === 'ABOUT US' && navigate) {
       navigate('about');
     }
-    if (item === 'CONTACT US' && navigate) {
+    if ((item === 'CONTACT US' || item === 'SERVICES') && navigate) {
       navigate('help');
     }
     onClose();

@@ -18,6 +18,7 @@ type HomePageProps = {
   onNavigateSuit?: () => void;
   onNavigateOffice?: () => void;
   onNavigateStreet?: () => void;
+  onNavigateJersey?: () => void;
   onNavigateTraditional?: () => void;
   onNavigateUnderwear?: () => void;
   onNavigateSocks?: () => void;
@@ -33,6 +34,7 @@ export function HomePage({
   onNavigateSuit,
   onNavigateOffice,
   onNavigateStreet,
+  onNavigateJersey,
   onNavigateTraditional,
   onNavigateUnderwear,
   onNavigateSocks,
@@ -51,6 +53,7 @@ export function HomePage({
       'Office wear': onNavigateOffice,
       'Suit wear': onNavigateSuit,
       'Street wear': onNavigateStreet,
+      Jersey: onNavigateJersey,
       'Traditional Outfit': onNavigateTraditional,
       Underwear: onNavigateUnderwear,
       Socks: onNavigateSocks,

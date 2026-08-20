@@ -94,7 +94,7 @@ export function AboutPage({
         <section className="max-w-md mb-10">
           <h2 className="text-sm font-medium tracking-widest mb-4">About Us</h2>
           <p className="text-sm leading-relaxed text-ink/80">
-            COSLAARY is a premium men's clothing brand founded in 2024.
+            CosLaary is a premium men's clothing brand founded in 2024.
             We focus on quiet quality — pieces built with weight, structure, and
             details that matter. No loud branding, no trends for the sake of trends.
             The name and eagle stand for strength, clarity, and intention. Every
@@ -106,7 +106,7 @@ export function AboutPage({
         <section className="max-w-md mb-10">
           <h2 className="text-sm font-medium tracking-widest mb-4">MISSION</h2>
           <p className="text-sm leading-relaxed text-ink/80">
-            COSLAARY exists to create premium clothing that speaks in details.
+            CosLaary exists to create premium clothing that speaks in details.
             We believe a man's style should be felt before it's seen.
             Our mission is to deliver pieces built with real weight, clean structure,
             and intentional craftsmanship - so every man who wears CosLaary
@@ -118,7 +118,7 @@ export function AboutPage({
           <h2 className="text-sm font-medium tracking-widest mb-4">EYESIGHT</h2>
           <p className="text-sm leading-relaxed text-ink/80">
             We envision a world where men choose intention over impulse.
-            COSLAARY aims to be recognized globally as the brand that proved
+            CosLaary aims to be recognized globally as the brand that proved
             "less is more" - where quality, weight, and detail replace loud branding.
             Our goal is to build a wardrobe of essentials that men wear for years,
             not seasons. Clothing that carries connotation, confidence, and craft.

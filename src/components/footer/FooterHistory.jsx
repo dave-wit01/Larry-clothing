@@ -8,6 +8,7 @@ const categoryTargets = {
   'Office wear': 'office',
   'Suit wear': 'suit',
   'Street wear': 'street',
+  Jersey: 'jersey',
   'Traditional Outfit': 'traditional',
   Underwear: 'underwear',
   Socks: 'socks',

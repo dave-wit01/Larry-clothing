@@ -9,7 +9,7 @@ export type MenCollection = {
 export const menCollections: MenCollection[] = [
   { label: 'Casual wear', status: 'available', navigationLabel: 'Casual wear' },
   { label: 'Streetwear', status: 'available', navigationLabel: 'Street wear' },
-  { label: 'Jersey', status: 'available', navigationLabel: 'Street wear' },
+  { label: 'Jersey', status: 'available', navigationLabel: 'Jersey' },
   { label: 'Outerwear', status: 'coming-soon' },
   { label: "Men’s boxer briefs", status: 'coming-soon' },
   { label: 'Tank tops', status: 'coming-soon' },

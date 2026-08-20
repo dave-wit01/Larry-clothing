@@ -68,6 +68,7 @@ type View =
   | 'suit'
   | 'office'
   | 'street'
+  | 'jersey'
   | 'traditional'
   | 'underwear'
   | 'socks'
@@ -192,6 +193,23 @@ function App() {
   } else if (view === 'street') {
     content = (
       <StreetWearPage
+        onOpenLogin={() => setView('login')}
+        onOpenRegister={() => setView('register')}
+        onGoHome={() => setView('home')}
+        onNavigateCasual={() => setView('casual')}
+        onNavigateSuit={() => setView('suit')}
+        onNavigateOffice={() => setView('office')}
+        onNavigateTraditional={() => setView('traditional')}
+        onNavigateUnderwear={() => setView('underwear')}
+        onNavigateSocks={() => setView('socks')}
+        onNavigateAbout={() => setView('about')}
+        onNavigateHelp={() => setView('help')}
+      />
+    );
+  } else if (view === 'jersey') {
+    content = (
+      <StreetWearPage
+        collectionName="Jersey"
         onOpenLogin={() => setView('login')}
         onOpenRegister={() => setView('register')}
         onGoHome={() => setView('home')}
@@ -353,6 +371,7 @@ function App() {
         onNavigateSuit={() => setView('suit')}
         onNavigateOffice={() => setView('office')}
         onNavigateStreet={() => setView('street')}
+        onNavigateJersey={() => setView('jersey')}
         onNavigateTraditional={() => setView('traditional')}
         onNavigateUnderwear={() => setView('underwear')}
         onNavigateSocks={() => setView('socks')}

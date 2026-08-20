@@ -7,6 +7,7 @@ export type NavigationTarget =
   | 'suit'
   | 'office'
   | 'street'
+  | 'jersey'
   | 'traditional'
   | 'underwear'
   | 'socks'

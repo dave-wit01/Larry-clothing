@@ -22,5 +22,11 @@ describe('Creations collection menu', () => {
     await user.click(screen.getByRole('button', { name: 'Casual wear' }));
 
     expect(onNavigate).toHaveBeenCalledWith('Casual wear');
+
+    await user.click(screen.getByRole('button', { name: 'Streetwear' }));
+    await user.click(screen.getByRole('button', { name: 'Jersey' }));
+
+    expect(onNavigate).toHaveBeenNthCalledWith(2, 'Street wear');
+    expect(onNavigate).toHaveBeenNthCalledWith(3, 'Jersey');
   });
 });

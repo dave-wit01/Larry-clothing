@@ -15,7 +15,7 @@ export type UnderwearItem = {
 export const UNDERWEAR_FEATURE_IMAGE = underwearFeature
 
 export const DEFAULT_UNDERWEAR_PARAGRAPH =
-  'Marking the return of the lvxtm collection, the 130th anniversary of the monogram origin. Vnm, time trunk, and monogram embleme. Blending creative spirit with timeless elegance, each collection reflects a distinct facet of CosLarry.'
+  'Marking the return of the lvxtm collection, the 130th anniversary of the monogram origin. Vnm, time trunk, and monogram embleme. Blending creative spirit with timeless elegance, each collection reflects a distinct facet of CosLaary.'
 
 export const DEFAULT_UNDERWEAR_ROW: UnderwearItem[] = [
   {

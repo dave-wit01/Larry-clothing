@@ -33,7 +33,7 @@ const defaultCategories: CasualCategoryItem[] = [
 
 export function CasualWearSection({
   heading = 'Casual wear',
-  description = "Marking the return of the lvxtm collection, the 130th annivesary of the monogram origine.Vnm, time trunk,and monogram embleme. Blending creative spirit with timeless elegance, each collection reflects a distinct facet of CosLarry",
+  description = "Marking the return of the lvxtm collection, the 130th annivesary of the monogram origine.Vnm, time trunk,and monogram embleme. Blending creative spirit with timeless elegance, each collection reflects a distinct facet of CosLaary",
   categories = defaultCategories,
   onSelectItem,
   ...sectionProps

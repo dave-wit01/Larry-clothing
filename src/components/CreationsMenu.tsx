@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Minus, Plus } from 'lucide-react';
-import { menuLinks } from '../data/navigation';
+import { menCollections } from '../data/navigation';
 
 type CreationsMenuProps = {
   isOpen: boolean;
@@ -51,14 +51,14 @@ export function CreationsMenu({ isOpen, onClose, onNavigate }: CreationsMenuProp
         {isMenOpen && (
           <nav id="creations-men-collection" aria-label="Men collections">
             <ul className="py-2">
-              {menuLinks.Men.map((category) => (
-                <li key={category}>
+              {menCollections.filter((collection) => collection.status === 'available').map((collection) => (
+                <li key={collection.label}>
                   <button
                     type="button"
                     className="block w-full px-10 py-3 text-left text-sm font-medium transition-colors hover:bg-ink/5"
-                    onClick={() => onNavigate(category)}
+                    onClick={() => onNavigate(collection.navigationLabel ?? collection.label)}
                   >
-                    {category}
+                    {collection.label}
                   </button>
                 </li>
               ))}
