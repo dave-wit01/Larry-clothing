@@ -4,6 +4,7 @@ import { HomePage } from './pages/HomePage';
 import { SearchProvider } from './context/SearchContext';
 import { NavigationProvider } from './context/NavigationContext';
 import { CartProvider } from './context/CartContext';
+import { ShoppingContextProvider } from './context/ShoppingContext';
 import type { SearchProduct } from './data/searchData';
 
 // Keep the first visit focused on the homepage. Other screens are fetched only
@@ -487,25 +488,27 @@ function App() {
 
   return (
     <NavigationProvider navigate={setView} onBack={goBack}>
-      <CartProvider onOpenCart={openCart} onBuyNow={openCart}>
-        <SearchProvider onSubmitSearch={openSearchResults}>
-          <div
-            ref={pageContainerRef}
-            className={`app-shell${isSwiping ? ' is-swiping' : ''}`}
-            style={{ transform: `translateX(${swipeOffset}px)` }}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchEnd}
-          >
-            <Suspense fallback={<main className="min-h-screen bg-paper" aria-busy="true" />}>
-              <div key={view} className="view-transition">
-                {content}
-              </div>
-            </Suspense>
-          </div>
-        </SearchProvider>
-      </CartProvider>
+      <ShoppingContextProvider>
+        <CartProvider onOpenCart={openCart} onBuyNow={openCart}>
+          <SearchProvider onSubmitSearch={openSearchResults}>
+            <div
+              ref={pageContainerRef}
+              className={`app-shell${isSwiping ? ' is-swiping' : ''}`}
+              style={{ transform: `translateX(${swipeOffset}px)` }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onTouchCancel={handleTouchEnd}
+            >
+              <Suspense fallback={<main className="min-h-screen bg-paper" aria-busy="true" />}>
+                <div key={view} className="view-transition">
+                  {content}
+                </div>
+              </Suspense>
+            </div>
+          </SearchProvider>
+        </CartProvider>
+      </ShoppingContextProvider>
     </NavigationProvider>
   );
 }

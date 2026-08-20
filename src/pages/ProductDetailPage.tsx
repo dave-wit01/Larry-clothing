@@ -4,6 +4,7 @@ import { Header } from '../components/Header';
 import { MenuDrawer } from '../components/MenuDrawer';
 import { ServicesDrawer } from '../components/ServicesDrawer';
 import { useCart } from '../context/CartContext';
+import { useShoppingContext } from '../context/ShoppingContext';
 import type { SearchProduct } from '../data/searchData';
 import FullFooter from './Footer.jsx';
 import { formatPrice } from '../lib/currency';
@@ -42,6 +43,7 @@ export function ProductDetailPage({
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
   const { addItem, buyNow, hasItem } = useCart();
+  const { setCategoryContext } = useShoppingContext();
 
   useEffect(() => {
     setSelectedColor(product.colors[0]);
@@ -161,7 +163,10 @@ export function ProductDetailPage({
             <div className="mt-9 grid gap-3 sm:grid-cols-2">
               <button
                 type="button"
-                onClick={() => addItem(cartProduct)}
+                onClick={() => {
+                  setCategoryContext(product.category);
+                  addItem(cartProduct);
+                }}
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-ink px-5 text-sm font-semibold uppercase tracking-[0.1em] transition hover:border-emerald hover:text-emerald"
               >
                 <ShoppingBag size={18} strokeWidth={1.5} />
@@ -169,7 +174,10 @@ export function ProductDetailPage({
               </button>
               <button
                 type="button"
-                onClick={() => buyNow(cartProduct)}
+                onClick={() => {
+                  setCategoryContext(product.category);
+                  buyNow(cartProduct);
+                }}
                 className="min-h-12 rounded-full bg-ink px-5 text-sm font-semibold uppercase tracking-[0.1em] text-paper transition hover:bg-emerald"
               >
                 BUY NOW

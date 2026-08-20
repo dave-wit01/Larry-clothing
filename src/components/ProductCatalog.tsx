@@ -1,6 +1,7 @@
 import { Heart, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { useShoppingContext } from '../context/ShoppingContext';
 import { formatPrice } from '../lib/currency';
 
 export type CatalogProduct = { id: string; name: string; price: number; image: string };
@@ -8,6 +9,7 @@ export type CatalogProduct = { id: string; name: string; price: number; image: s
 export function ProductCatalog({ title, products }: { title: string; products: CatalogProduct[] }) {
   const [favourites, setFavourites] = useState<string[]>([]);
   const { buyNow, hasItem, toggleItem } = useCart();
+  const { setCategoryContext } = useShoppingContext();
   return (
     <section className="bg-paper py-14 text-ink sm:py-20">
       <div className="mx-auto max-w-4xl px-5 sm:px-8">
@@ -59,7 +61,10 @@ export function ProductCatalog({ title, products }: { title: string; products: C
                   <button
                     type="button"
                     className={`inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink transition hover:bg-ink hover:text-paper ${isInCart ? 'bg-ink text-paper' : ''}`}
-                    onClick={() => toggleItem(product)}
+                    onClick={() => {
+                      setCategoryContext(title);
+                      toggleItem(product);
+                    }}
                     aria-label={`${isInCart ? 'Remove' : 'Add'} ${product.name} ${isInCart ? 'from' : 'to'} cart`}
                     aria-pressed={isInCart}
                   >
@@ -68,7 +73,10 @@ export function ProductCatalog({ title, products }: { title: string; products: C
                   <button
                     type="button"
                     className="min-h-10 rounded-full bg-ink px-3 text-xs font-semibold uppercase tracking-[0.12em] text-paper hover:bg-emerald"
-                    onClick={() => buyNow(product)}
+                    onClick={() => {
+                      setCategoryContext(title);
+                      buyNow(product);
+                    }}
                   >
                     Buy now
                   </button>

@@ -2,6 +2,7 @@ import { Heart, ShoppingCart } from 'lucide-react';
 import { DEFAULT_UNDERWEAR_ROW, type UnderwearItem } from '../data/underwear';
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { useShoppingContext } from '../context/ShoppingContext';
 import { formatPrice } from '../lib/currency';
 
 type CartProduct = {
@@ -24,6 +25,7 @@ export function UnderwearSection({
 }: UnderwearSectionProps) {
   const [favourites, setFavourites] = useState<string[]>([]);
   const { addItem, hasItem, toggleItem } = useCart();
+  const { setCategoryContext } = useShoppingContext();
 
   const toggleFavourite = (id: string) => {
     setFavourites((current) =>
@@ -71,7 +73,10 @@ export function UnderwearSection({
                 <button
                   type="button"
                   className="block w-full overflow-hidden rounded-2xl"
-                  onClick={() => toggleItem(cartProduct)}
+                  onClick={() => {
+                    setCategoryContext(heading);
+                    toggleItem(cartProduct);
+                  }}
                   aria-label={`Add ${item.name} to cart`}
                 >
                   <img
@@ -90,7 +95,10 @@ export function UnderwearSection({
                   <button
                     type="button"
                     className={`inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink transition hover:bg-ink hover:text-paper ${isInCart ? 'bg-ink text-paper' : ''}`}
-                    onClick={() => toggleItem(cartProduct)}
+                    onClick={() => {
+                      setCategoryContext(heading);
+                      toggleItem(cartProduct);
+                    }}
                     aria-label={`${isInCart ? 'Remove' : 'Add'} ${item.name} ${isInCart ? 'from' : 'to'} cart`}
                     aria-pressed={isInCart}
                   >
@@ -100,6 +108,7 @@ export function UnderwearSection({
                     type="button"
                     className="min-h-10 rounded-full bg-ink px-3 text-xs font-semibold uppercase tracking-[0.12em] text-paper transition hover:bg-emerald"
                     onClick={() => {
+                      setCategoryContext(heading);
                       addItem(cartProduct);
                       onBuyNow?.(cartProduct);
                     }}

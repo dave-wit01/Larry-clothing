@@ -5,6 +5,7 @@ import { ServicesDrawer } from '../components/ServicesDrawer';
 import { Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react';
 import FullFooter from './Footer.jsx';
 import { useCart } from '../context/CartContext';
+import { useShoppingContext } from '../context/ShoppingContext';
 import { formatPrice } from '../lib/currency';
 
 type CartPageProps = {
@@ -54,6 +55,7 @@ export function CartPage({
   const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({});
   const [selectedImages, setSelectedImages] = useState<Record<string, string>>({});
   const { items, removeItem, setQuantity } = useCart();
+  const { categoryContext } = useShoppingContext();
   const cartItems = items;
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -99,13 +101,10 @@ export function CartPage({
         onOpenMenu={() => setIsMenuOpen(true)}
       />
       <main className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10">
-        <div className="mb-10 text-center sm:mb-14">
+        <div className="mb-8 text-center sm:mb-10">
           <p className="text-xs font-medium uppercase tracking-[0.25em] text-emerald">
-            Your selection
+            {categoryContext ? `From ${categoryContext}` : 'Your selection'}
           </p>
-          <h1 className="mt-3 font-display text-4xl font-medium leading-tight sm:text-5xl">
-            Shopping bag
-          </h1>
         </div>
         {cartItems.length === 0 ? (
           <div className="mx-auto max-w-md rounded-2xl border border-line bg-parchment px-6 py-14 text-center shadow-sm">
