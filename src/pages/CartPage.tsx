@@ -33,7 +33,7 @@ type CartPageProps = {
   ) => void;
 };
 
-const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+const SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
 
 export function CartPage({
   onOpenLogin,
@@ -163,10 +163,7 @@ export function CartPage({
                   <div className="min-w-0 self-center py-1 sm:py-4">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="text-xs font-medium uppercase tracking-[0.25em] text-ink/55">
-                          In your bag
-                        </p>
-                        <h2 className="mt-3 font-display text-3xl font-medium leading-tight sm:text-4xl">
+                        <h2 className="font-display text-3xl font-medium leading-tight sm:text-4xl">
                           {item.name}
                         </h2>
                       </div>

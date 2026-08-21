@@ -34,7 +34,9 @@ function toProduct(row: ProductRow): SearchProduct {
     image: images[0] || '',
     images,
     colors: row.colors?.length ? row.colors : fallback?.colors || ['Black'],
-    sizes: row.sizes?.length ? row.sizes : fallback?.sizes || ['S', 'M', 'L', 'XL'],
+    sizes: (row.sizes?.length ? row.sizes : fallback?.sizes || ['S', 'M', 'L', 'XL']).filter(
+      (size) => size.toUpperCase() !== 'XS'
+    ),
     isNew: row.is_new ?? fallback?.isNew,
   };
 }

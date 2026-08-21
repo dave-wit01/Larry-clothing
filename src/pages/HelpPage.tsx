@@ -39,7 +39,6 @@ export default function HelpPage({
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER?.replace(/\D/g, '');
   const configuredEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim();
   const contactEmail = configuredEmail?.endsWith('@example.com') ? undefined : configuredEmail;
-  const serviceArea = import.meta.env.VITE_SERVICE_AREA?.trim() || 'Accra, Ghana';
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 8);
@@ -71,11 +70,11 @@ export default function HelpPage({
           },
         ]
       : []),
-    { icon: MapPin, title: 'SERVICE AREA', description: `Serving customers in ${serviceArea}.` },
+    { icon: MapPin, title: 'SERVICE AREA', description: 'Serving customers Nationwide.' },
     {
       icon: Clock3,
       title: 'RESPONSE TIME',
-      description: 'Our team responds within one business day.',
+      description: 'Our team responds immediately after order.',
     },
   ];
 
