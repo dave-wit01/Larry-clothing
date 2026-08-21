@@ -68,11 +68,16 @@ export function CartProvider({
   const addItem = (item: CartProduct) => {
     setItems((current) => {
       const existingItem = current.find((cartItem) => cartItem.id === item.id);
-      return existingItem
-        ? current.map((cartItem) =>
-            cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
-          )
-        : [...current, { ...item, quantity: 1 }];
+      if (existingItem) {
+        // Keep the item being selected at the top and refresh its image data in
+        // case it was added before its Supabase images were available.
+        return [
+          { ...existingItem, ...item, quantity: existingItem.quantity + 1 },
+          ...current.filter((cartItem) => cartItem.id !== item.id),
+        ];
+      }
+
+      return [{ ...item, quantity: 1 }, ...current];
     });
   };
 

@@ -119,10 +119,12 @@ export function CartPage({
           </div>
         ) : (
           cartItems.map((item) => {
-            const galleryImages = Array.from(new Set([item.image, ...(item.images ?? [])])).slice(
-              0,
-              3
-            );
+            // Supabase images are the source of truth. This also corrects carts
+            // saved before the catalogue stopped using local fallback photos.
+            const uploadedImages = item.images?.filter(Boolean) ?? [];
+            const galleryImages = Array.from(
+              new Set(uploadedImages.length ? uploadedImages : [item.image])
+            ).slice(0, 3);
             const selectedImage = selectedImages[item.id] ?? galleryImages[0];
 
             return (
@@ -265,7 +267,7 @@ export function CartPage({
                         id: item.id,
                         name: item.name,
                         price: item.price,
-                        image: item.image,
+                        image: item.images?.find(Boolean) ?? item.image,
                         quantity: item.quantity,
                         size: selectedSizes[item.id],
                       }))

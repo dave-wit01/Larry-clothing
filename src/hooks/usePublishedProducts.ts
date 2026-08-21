@@ -18,20 +18,21 @@ const fallbackById = new Map(SEARCH_PRODUCTS.map((product) => [product.id, produ
 
 function toProduct(row: ProductRow): SearchProduct {
   const fallback = fallbackById.get(row.id);
+  const images = Array.from(
+    new Set(
+      [row.image_url, ...(row.image_urls ?? [])].filter((image): image is string => Boolean(image))
+    )
+  );
 
   return {
     id: row.id,
     name: row.name,
     category: row.category || fallback?.category || 'Casual wear',
     price: Number(row.price),
-    image: row.image_url || fallback?.image || '',
-    images: Array.from(
-      new Set(
-        [row.image_url, ...(row.image_urls ?? [])].filter((image): image is string =>
-          Boolean(image)
-        )
-      )
-    ),
+    // Never substitute a bundled image for a Supabase product. The first stored
+    // image is the catalogue image, and any remaining stored URLs are its gallery.
+    image: images[0] || '',
+    images,
     colors: row.colors?.length ? row.colors : fallback?.colors || ['Black'],
     sizes: row.sizes?.length ? row.sizes : fallback?.sizes || ['S', 'M', 'L', 'XL'],
     isNew: row.is_new ?? fallback?.isNew,
@@ -48,7 +49,11 @@ export function usePublishedProducts(categories?: string | string[]) {
       ? SEARCH_PRODUCTS.filter((product) => values.includes(product.category))
       : SEARCH_PRODUCTS;
   }, [categoryKey]);
-  const [products, setProducts] = useState<SearchProduct[]>(fallbackProducts);
+  // When Supabase is available, wait for its response instead of briefly rendering
+  // the local sample catalogue and then swapping the images underneath the visitor.
+  const [products, setProducts] = useState<SearchProduct[]>(() =>
+    supabase ? [] : fallbackProducts
+  );
   const [isLoading, setIsLoading] = useState(Boolean(supabase));
 
   useEffect(() => {
@@ -76,8 +81,16 @@ export function usePublishedProducts(categories?: string | string[]) {
       const { data, error } = await query;
       if (!isCurrent) return;
 
-      // A missing table or an empty new project should not leave the storefront blank.
-      setProducts(!error && data?.length ? data.map(toProduct) : fallbackProducts);
+      // A configured storefront must show only products with an image uploaded to
+      // Supabase. This also prevents an incomplete product record from rendering a
+      // broken image element.
+      setProducts(
+        !error && data
+          ? data
+              .filter((product) => Boolean(product.image_url || product.image_urls?.[0]))
+              .map(toProduct)
+          : []
+      );
       setIsLoading(false);
     };
 

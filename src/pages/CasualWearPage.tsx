@@ -1,32 +1,32 @@
-import { useEffect, useState } from 'react'
-import { Header } from '../components/Header'
-import { MenuDrawer } from '../components/MenuDrawer'
-import { ServicesDrawer } from '../components/ServicesDrawer'
-import { ProductCatalog } from '../components/ProductCatalog'
-import { usePublishedProducts } from '../hooks/usePublishedProducts'
-import FullFooter from './Footer.jsx'
+import { useEffect, useState } from 'react';
+import { Header } from '../components/Header';
+import { MenuDrawer } from '../components/MenuDrawer';
+import { ServicesDrawer } from '../components/ServicesDrawer';
+import { ProductCatalog } from '../components/ProductCatalog';
+import { usePublishedProducts } from '../hooks/usePublishedProducts';
+import FullFooter from './Footer.jsx';
 
 type CartProduct = {
-  name: string
-  price: number
-  image: string
-}
+  name: string;
+  price: number;
+  image: string;
+};
 
 type CasualWearPageProps = {
-  onOpenLogin?: () => void
-  onOpenRegister?: () => void
-  onGoHome?: () => void
-  onNavigateCasual?: () => void
-  onNavigateSuit?: () => void
-  onNavigateOffice?: () => void
-  onNavigateStreet?: () => void
-  onNavigateTraditional?: () => void
-  onNavigateUnderwear?: () => void
-  onNavigateSocks?: () => void
-  onNavigateAbout?: () => void
-  onNavigateHelp?: () => void
-  onOpenCart?: (product: CartProduct) => void
-}
+  onOpenLogin?: () => void;
+  onOpenRegister?: () => void;
+  onGoHome?: () => void;
+  onNavigateCasual?: () => void;
+  onNavigateSuit?: () => void;
+  onNavigateOffice?: () => void;
+  onNavigateStreet?: () => void;
+  onNavigateTraditional?: () => void;
+  onNavigateUnderwear?: () => void;
+  onNavigateSocks?: () => void;
+  onNavigateAbout?: () => void;
+  onNavigateHelp?: () => void;
+  onOpenCart?: (product: CartProduct) => void;
+};
 
 export function CasualWearPage({
   onOpenLogin,
@@ -42,18 +42,18 @@ export function CasualWearPage({
   onNavigateAbout,
   onNavigateHelp,
 }: CasualWearPageProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const { products } = usePublishedProducts('Casual wear')
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { products, isLoading } = usePublishedProducts('Casual wear');
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 8)
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
 
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-paper text-ink">
@@ -71,28 +71,28 @@ export function CasualWearPage({
         onGoHome={onGoHome}
         onNavigate={(link) => {
           if (link === 'Casual wear' && onNavigateCasual) {
-            onNavigateCasual()
+            onNavigateCasual();
           }
           if (link === 'Suit wear' && onNavigateSuit) {
-            onNavigateSuit()
+            onNavigateSuit();
           }
           if (link === 'Office wear' && onNavigateOffice) {
-            onNavigateOffice()
+            onNavigateOffice();
           }
           if (link === 'Street wear' && onNavigateStreet) {
-            onNavigateStreet()
+            onNavigateStreet();
           }
           if (link === 'Traditional Outfit' && onNavigateTraditional) {
-            onNavigateTraditional()
+            onNavigateTraditional();
           }
           if (link === 'Underwear' && onNavigateUnderwear) {
-            onNavigateUnderwear()
+            onNavigateUnderwear();
           }
           if (link === 'Socks' && onNavigateSocks) {
-            onNavigateSocks()
+            onNavigateSocks();
           }
           if (link === 'About CosLaary' && onNavigateAbout) {
-            onNavigateAbout()
+            onNavigateAbout();
           }
         }}
       />
@@ -105,9 +105,14 @@ export function CasualWearPage({
         onOpenMenu={() => setIsMenuOpen(true)}
       />
       <main>
-        <ProductCatalog title="Casual wear" products={products} />
+        <ProductCatalog title="Casual wear" products={products} isLoading={isLoading} />
       </main>
-      <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
+      <FullFooter
+        onNavigateAbout={onNavigateAbout}
+        onNavigateHelp={onNavigateHelp}
+        onOpenServices={() => setIsMenuOpen(true)}
+        onOpenRegister={onOpenRegister}
+      />
     </div>
-  )
+  );
 }

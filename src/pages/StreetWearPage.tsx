@@ -1,26 +1,26 @@
-import { useEffect, useState } from 'react'
-import { Header } from '../components/Header'
-import { MenuDrawer } from '../components/MenuDrawer'
-import { ServicesDrawer } from '../components/ServicesDrawer'
-import { ProductCatalog } from '../components/ProductCatalog'
-import { usePublishedProducts } from '../hooks/usePublishedProducts'
-import FullFooter from './Footer.jsx'
+import { useEffect, useState } from 'react';
+import { Header } from '../components/Header';
+import { MenuDrawer } from '../components/MenuDrawer';
+import { ServicesDrawer } from '../components/ServicesDrawer';
+import { ProductCatalog } from '../components/ProductCatalog';
+import { usePublishedProducts } from '../hooks/usePublishedProducts';
+import FullFooter from './Footer.jsx';
 
 type StreetWearPageProps = {
-  onOpenLogin?: () => void
-  onOpenRegister?: () => void
-  onGoHome?: () => void
-  onNavigateCasual?: () => void
-  onNavigateSuit?: () => void
-  onNavigateOffice?: () => void
-  onNavigateTraditional?: () => void
-  onNavigateUnderwear?: () => void
-  onNavigateSocks?: () => void
-  onNavigateAbout?: () => void
-  onNavigateHelp?: () => void
-  onOpenCart?: (product: { name: string; price: number; image: string }) => void
-  collectionName?: 'Streetwear' | 'Jersey'
-}
+  onOpenLogin?: () => void;
+  onOpenRegister?: () => void;
+  onGoHome?: () => void;
+  onNavigateCasual?: () => void;
+  onNavigateSuit?: () => void;
+  onNavigateOffice?: () => void;
+  onNavigateTraditional?: () => void;
+  onNavigateUnderwear?: () => void;
+  onNavigateSocks?: () => void;
+  onNavigateAbout?: () => void;
+  onNavigateHelp?: () => void;
+  onOpenCart?: (product: { name: string; price: number; image: string }) => void;
+  collectionName?: 'Streetwear' | 'Jersey';
+};
 
 export function StreetWearPage({
   onOpenLogin,
@@ -36,18 +36,18 @@ export function StreetWearPage({
   onNavigateHelp,
   collectionName = 'Streetwear',
 }: StreetWearPageProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const { products } = usePublishedProducts(collectionName)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { products, isLoading } = usePublishedProducts(collectionName);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 8)
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
 
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-paper text-ink">
@@ -65,25 +65,25 @@ export function StreetWearPage({
         onGoHome={onGoHome}
         onNavigate={(link) => {
           if (link === 'Casual wear' && onNavigateCasual) {
-            onNavigateCasual()
+            onNavigateCasual();
           }
           if (link === 'Suit wear' && onNavigateSuit) {
-            onNavigateSuit()
+            onNavigateSuit();
           }
           if (link === 'Office wear' && onNavigateOffice) {
-            onNavigateOffice()
+            onNavigateOffice();
           }
           if (link === 'Traditional Outfit' && onNavigateTraditional) {
-            onNavigateTraditional()
+            onNavigateTraditional();
           }
           if (link === 'Underwear' && onNavigateUnderwear) {
-            onNavigateUnderwear()
+            onNavigateUnderwear();
           }
           if (link === 'Socks' && onNavigateSocks) {
-            onNavigateSocks()
+            onNavigateSocks();
           }
           if (link === 'About CosLaary' && onNavigateAbout) {
-            onNavigateAbout()
+            onNavigateAbout();
           }
         }}
       />
@@ -96,9 +96,14 @@ export function StreetWearPage({
         onOpenMenu={() => setIsMenuOpen(true)}
       />
       <main>
-        <ProductCatalog title={collectionName} products={products} />
+        <ProductCatalog title={collectionName} products={products} isLoading={isLoading} />
       </main>
-      <FullFooter onNavigateAbout={onNavigateAbout} onNavigateHelp={onNavigateHelp} onOpenServices={() => setIsMenuOpen(true)} onOpenRegister={onOpenRegister} />
+      <FullFooter
+        onNavigateAbout={onNavigateAbout}
+        onNavigateHelp={onNavigateHelp}
+        onOpenServices={() => setIsMenuOpen(true)}
+        onOpenRegister={onOpenRegister}
+      />
     </div>
-  )
+  );
 }
