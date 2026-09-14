@@ -92,19 +92,20 @@ export function searchProducts(query: string, products = SEARCH_PRODUCTS) {
     });
 }
 
-export function getSearchSuggestions(query: string) {
+export function getSearchSuggestions(query: string, products: SearchProduct[] = SEARCH_PRODUCTS) {
   const normalizedQuery = normalizeQuery(query);
   if (normalizedQuery.length < 2) {
     return [];
   }
 
-  const productMatches = SEARCH_PRODUCTS.filter(
+  const productMatches = products.filter(
     (product) =>
       product.name.toLowerCase().includes(normalizedQuery) ||
       product.category.toLowerCase().includes(normalizedQuery)
   );
 
-  const categoryMatches = SEARCH_CATEGORIES.filter((category) =>
+  const availableCategories = [...new Set(products.map((product) => product.category))];
+  const categoryMatches = availableCategories.filter((category) =>
     category.toLowerCase().includes(normalizedQuery)
   );
 

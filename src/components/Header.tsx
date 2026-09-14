@@ -5,6 +5,7 @@ import { getSearchSuggestions } from '../data/searchData';
 import { useSearch } from '../context/SearchContext';
 import { useCart } from '../context/CartContext';
 import { useBackNavigation } from '../context/NavigationContext';
+import { usePublishedProducts } from '../hooks/usePublishedProducts';
 
 const AccountMenu = lazy(() =>
   import('./AccountMenu').then((module) => ({ default: module.AccountMenu }))
@@ -36,10 +37,11 @@ export function Header({
   const { items, openCart } = useCart();
   const cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
   const goBack = useBackNavigation();
+  const { products } = usePublishedProducts();
 
   const suggestions = useMemo(
-    () => (debouncedQuery.length >= 2 ? getSearchSuggestions(debouncedQuery) : []),
-    [debouncedQuery]
+    () => (debouncedQuery.length >= 2 ? getSearchSuggestions(debouncedQuery, products) : []),
+    [debouncedQuery, products]
   );
 
   const recentDisplay = recentSearches.slice(0, 5);
